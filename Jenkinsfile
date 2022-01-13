@@ -25,7 +25,7 @@ pipeline {
         stage ('Nettoyage et push vers un registre publique') {
            agent any
            environment{
-               PASSWORD = credentials('capge_docker_access')
+               PASSWORD = credentials('token_dockerhub')
            }
            steps {
                script{
