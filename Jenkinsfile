@@ -32,7 +32,6 @@ pipeline {
                   organisation: 'lianhuahayu',
                   snykInstallation: 'snyk-latest',
                   snykTokenId: 'snyk_token',
-                  projectName: 'projet_icgroup',
                   additionalArguments: 'container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG --file=Dockerfile --json',
                   failOnIssues: 'false'
                     )		
