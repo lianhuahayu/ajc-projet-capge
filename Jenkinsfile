@@ -33,7 +33,7 @@ pipeline {
             steps {
                 sh """
                     snyk auth  ${SNYK_TOKEN}
-                    snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG --file=Dockerfile --org=cloudbees --project-name=project-python --severity-threshold=high --json
+                    snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG --file=Dockerfile --project-name=ajc-projet-final --severity-threshold=high --json
                 """		
                 }
             }                
