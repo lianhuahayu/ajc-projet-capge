@@ -33,7 +33,6 @@ pipeline {
                   snykInstallation: 'snyk-latest',
                   snykTokenId: 'snyk_token',
                   projectName: 'ajc-projet-capge',
-                  targetFile: 'Dockerfile',
                   failOnIssues: 'false'
                     )		
                 }
