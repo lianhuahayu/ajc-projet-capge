@@ -22,7 +22,22 @@ pipeline {
            }
        }
 
-        stage ('Nettoyage et push vers un registre publique') {
+        stage ('Test de vulnerabilites de $USERNAME/$IMAGE_NAME:$IMAGE_TAG') {
+           agent any
+           environment{
+               //Des variables et identifiants
+           }
+           steps {
+               script{
+                   // des commandes sh '''
+                   // instructions
+                   // '''
+               }
+           }
+       }
+    
+
+        stage ('Nettoyage local et push vers un registre publique') {
            agent any
            environment{
                PASSWORD = credentials('token_dockerhub')
@@ -36,6 +51,63 @@ pipeline {
                        docker rm $CONTAINER_NAME || true
                        docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG
                    '''
+               }
+           }
+       }
+
+        stage ('Deploiement automatique de env-test via terraform') {
+           agent any
+           environment{
+               //Des variables et identifiants
+           }
+           steps {
+               script{
+                   // des commandes sh '''
+                   // instructions
+                   // '''
+               }
+           }
+       }
+
+
+        stage ('Test de env-test') {
+           agent any
+           environment{
+               //Des variables et identifiants
+           }
+           steps {
+               script{
+                   // des commandes sh '''
+                   // instructions
+                   // '''
+               }
+           }
+       }
+
+        stage ('Deploiement manuel de env-prod apres validation de env-test') {
+           agent any
+           environment{
+               //Des variables et identifiants
+           }
+           steps {
+               script{
+                   // des commandes sh '''
+                   // instructions
+                   // '''
+               }
+           }
+       }
+
+        stage ('Test de env-prod') {
+           agent any
+           environment{
+               //Des variables et identifiants
+           }
+           steps {
+               script{
+                   // des commandes sh '''
+                   // instructions
+                   // '''
                }
            }
        }
