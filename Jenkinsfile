@@ -40,8 +40,8 @@ pipeline {
                     snyk auth ${SNYK_TOKEN}
                     snyk test --json \
                     --docker $USERNAME/$IMAGE_NAME:$IMAGE_TAG \
-                    --file=requirements.txt \
-                    -severity-threshold=high \
+                    --file=Dockerfile \
+                    --severity-threshold=high \
                     --org=icgroup \
                     --project-name=project_icgroup
                 """		
