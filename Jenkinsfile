@@ -29,9 +29,10 @@ pipeline {
             steps {
                 echo 'Testing...'
                 snykSecurity(
-                  organisation: 'djoseph14',
+                  organisation: 'lianhuahayu',
                   snykInstallation: 'snyk-latest',
                   snykTokenId: 'snyk_token',
+                  projectName: 'lianhuahayu/ajc-projet-capge'
                   targetFile: 'Dockerfile',
                   failOnIssues: 'false'
                     )		
