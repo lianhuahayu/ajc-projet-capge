@@ -25,6 +25,7 @@ pipeline {
        }
 
         stage('Test de vulnerabilites avec SNYK') {
+            agent any
             tools {
                 snyk 'snyk-latest'
             }	
