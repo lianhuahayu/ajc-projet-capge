@@ -5,6 +5,7 @@ pipeline {
         IMAGE_TAG = "1.0"
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
+        SNYK_TOKEN = credentials('snyk_token')
     }
 
     agent none
@@ -26,9 +27,6 @@ pipeline {
 
         stage('Test de vulnerabilites avec SNYK') {
             agent any
-            environment{
-               SNYK_TOKEN = credentials('snyk_token')
-            }
             tools {
                 snyk 'snyk-latest'
             }	
