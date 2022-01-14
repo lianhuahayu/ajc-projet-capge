@@ -8,7 +8,6 @@ pipeline {
     }
 
     agent none
-
     stages{
 
         stage ('Build image ic-webapp'){
@@ -47,12 +46,8 @@ pipeline {
                     --project-name=project_icgroup
                 """		
                 }
-            }
-        
-            
-       
-    
-
+            }                
+          
         stage ('Nettoyage local et push vers un registre publique') {
            agent any
            environment{
