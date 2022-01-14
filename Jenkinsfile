@@ -25,10 +25,9 @@ pipeline {
         stage ('Test de vulnerabilites de $USERNAME/$IMAGE_NAME:$IMAGE_TAG') {
            agent any
            steps {
-               script{
-                   // des commandes sh '''
+               script{ sh '''
                    // instructions
-                   // '''
+                   '''
                }
            }
        }
@@ -55,10 +54,9 @@ pipeline {
         stage ('Deploiement automatique de env-test via terraform') {
            agent any
            steps {
-               script{
-                   // des commandes sh '''
+               script{ sh '''
                    // instructions
-                   // '''
+                   '''
                }
            }
        }
@@ -67,10 +65,9 @@ pipeline {
         stage ('Test de env-test') {
            agent any
            steps {
-               script{
-                   // des commandes sh '''
+               script{ sh '''
                    // instructions
-                   // '''
+                   '''
                }
            }
        }
@@ -78,10 +75,9 @@ pipeline {
         stage ('Deploiement manuel de env-prod apres validation de env-test') {
            agent any
            steps {
-               script{
-                   // des commandes sh '''
+               script{ sh '''
                    // instructions
-                   // '''
+                   '''
                }
            }
        }
@@ -89,10 +85,9 @@ pipeline {
         stage ('Test de env-prod') {
            agent any
            steps {
-               script{
-                   // des commandes sh '''
+               script{ sh '''
                    // instructions
-                   // '''
+                   '''
                }
            }
        }
