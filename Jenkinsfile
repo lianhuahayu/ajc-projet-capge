@@ -37,7 +37,7 @@ pipeline {
                   organisation: 'djoseph14',
                   severity: 'high',
                   snykInstallation: 'snyk-latest',
-                  snykTokenId: '$PASSWORD',
+                  snykTokenId: '${PASSWORD}',
                   targetFile: 'Dockerfile',
                   failOnIssues: 'true'
                     )		
