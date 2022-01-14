@@ -25,16 +25,25 @@ pipeline {
            }
        }
 
-        stage ('Test de vulnerabilites') {
+        stage('Test de vulnerabilites avec SNYK') {
            agent any
-           steps {
-               script{
-                   sh '''
-                       echo 'PASSED' || true
-                   '''               
-               }
+           tools {
+               snyk 'snyk-latest'
            }
-       }
+           steps {
+               snykSecurity(
+                   organisation: 'icgroup',
+                   severity: 'high',
+                   snykInstallation: 'snyk-latest',
+                   snykTokenId: 'snyk_token',
+                   dockerImageName: '$USERNAME/$IMAGE_NAME:$IMAGE_TAG',
+                   targetFile: 'Dockerfile',
+                   failOnIssues: 'true'
+                )
+            }
+        }
+            
+       
     
 
         stage ('Nettoyage local et push vers un registre publique') {
