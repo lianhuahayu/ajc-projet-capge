@@ -7,7 +7,7 @@ pipeline {
         CONTAINER_NAME = "test-ic-webapp"
     }
 
-    agent none
+    agent any
     stages{
 
         stage ('Build image ic-webapp'){
