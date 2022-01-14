@@ -7,7 +7,7 @@ pipeline {
         CONTAINER_NAME = "test-ic-webapp"
     }
 
-    agent any
+    agent none
     stages{
 
         stage ('Build image ic-webapp'){
@@ -25,6 +25,7 @@ pipeline {
        }
 
         stage('Test de vulnerabilites avec SNYK') {	
+            agent any
             steps {
                 echo 'Testing...'
                 snykSecurity(
