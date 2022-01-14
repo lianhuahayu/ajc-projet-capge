@@ -25,16 +25,24 @@ pipeline {
        }
 
         stage('Test de vulnerabilites avec SNYK') {	
-            agent any
+            agent {
+                docker {
+                    image 'snyk/snyk-cli:python-3.8'
+                    }
+            }
+            environment {
+                SNYK_TOKEN = credentials('snyk_token')
+            }	
             steps {
-                echo 'Testing...'
-                snykSecurity(
-                  organisation: 'lianhuahayu',
-                  snykInstallation: 'snyk-latest',
-                  snykTokenId: 'snyk_token',
-                  additionalArguments: 'container $USERNAME/$IMAGE_NAME:$IMAGE_TAG --file=Dockerfile',
-                  failOnIssues: 'false'
-                    )		
+                sh """
+                    pip install -r requirements.txt
+                    snyk auth ${SNYK_TOKEN}
+                    snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG \
+                        --json \
+                        --severity-threshold=high \
+                        --file=Dockerfile \
+                        --org=lianhuahayu 
+                    """			
                 }
             }                
           
