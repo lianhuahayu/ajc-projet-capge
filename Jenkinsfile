@@ -27,7 +27,7 @@ pipeline {
         stage('Test de vulnerabilites avec SNYK') {
             agent any
             environment{
-               PASSWORD = credentials('synk_token')
+               PASSWORD = credentials('snyk_token')
                 }
             tools {
                 snyk 'snyk-latest'
