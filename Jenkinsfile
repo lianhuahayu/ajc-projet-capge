@@ -36,7 +36,7 @@ pipeline {
                    severity: 'high',
                    snykInstallation: 'snyk-latest',
                    snykTokenId: 'snyk_token',
-                   dockerImageName: '$USERNAME/$IMAGE_NAME:$IMAGE_TAG',
+                   //dockerImageName: '$USERNAME/$IMAGE_NAME:$IMAGE_TAG',
                    targetFile: 'Dockerfile',
                    failOnIssues: 'true'
                 )
