@@ -32,7 +32,7 @@ pipeline {
                   organisation: 'lianhuahayu',
                   snykInstallation: 'snyk-latest',
                   snykTokenId: 'snyk_token',
-                  additionalArguments: 'container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG --file=Dockerfile --json',
+                  additionalArguments: 'container $USERNAME/$IMAGE_NAME:$IMAGE_TAG --file=Dockerfile',
                   failOnIssues: 'false'
                     )		
                 }
