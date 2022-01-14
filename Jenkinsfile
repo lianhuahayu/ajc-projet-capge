@@ -33,7 +33,7 @@ pipeline {
             environment {
                 SNYK_TOKEN = credentials('snyk_token')
                 }	
-            }
+            
             steps {
                 sh """
                     pip install -r requirements.txt
@@ -62,9 +62,9 @@ pipeline {
                        docker rm $CONTAINER_NAME || true
                        docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG
                    '''
-               }
-           }
-       }
+                    }
+                }
+            }
 
         stage ('Deploiement automatique de env-test via terraform') {
            agent any
@@ -73,9 +73,9 @@ pipeline {
                    sh '''
                        echo 'PASSED' || true
                    '''               
-               }
-           }
-       }
+                    }
+                }
+            }
 
 
         stage ('Test de env-test') {
@@ -85,9 +85,9 @@ pipeline {
                    sh '''
                        echo 'PASSED' || true
                    '''               
-               }
-           }
-       }
+                    }
+                }
+            }
 
         stage ('Deploiement manuel de env-prod apres validation de env-test') {
            agent any
@@ -96,9 +96,9 @@ pipeline {
                    sh '''
                        echo 'PASSED' || true
                    '''               
-               }
-           }
-       }
+                    }
+                }
+            }
 
         stage ('Test de env-prod') {
            agent any
@@ -110,5 +110,5 @@ pipeline {
                }
            }
        }
-}
+    }
 
