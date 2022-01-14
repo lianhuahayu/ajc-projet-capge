@@ -32,7 +32,7 @@ pipeline {
                   organisation: 'lianhuahayu',
                   snykInstallation: 'snyk-latest',
                   snykTokenId: 'snyk_token',
-                  projectName: 'lianhuahayu/ajc-projet-capge'
+                  projectName: 'ajc-projet-capge'
                   targetFile: 'Dockerfile',
                   failOnIssues: 'false'
                     )		
