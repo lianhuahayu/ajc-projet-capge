@@ -26,20 +26,20 @@ pipeline {
 
         stage('Test de vulnerabilites avec SNYK') {
             agent any
-            //environment{
-            //   PASSWORD = credentials('snyk_token')
-            //}
+            environment{
+               SNYK_TOKEN = credentials('snyk_token')
+            }
             tools {
                 snyk 'snyk-latest'
             }	
             steps {
                 snykSecurity(
                   organisation: 'djoseph14',
-                  severity: 'high',
                   snykInstallation: 'snyk-latest',
-                  snykTokenId: 'snyk_token',
+                  snykTokenId: '$SNYK_TOKEN',
                   targetFile: 'Dockerfile',
-                  failOnIssues: 'true'
+                  failOnIssues: 'false'
+                  additionalArguments: '--all-sub-projects --debug'
                     )		
                 }
             }                
