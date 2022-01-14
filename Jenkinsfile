@@ -18,7 +18,7 @@ pipeline {
                    sh '''
                        docker stop $CONTAINER_NAME || true
                        docker rm $CONTAINER_NAME || true
-                       docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG
+                       docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG || true
                        docker build -t $USERNAME/$IMAGE_NAME:$IMAGE_TAG .
                    '''
                }
@@ -28,7 +28,11 @@ pipeline {
         stage ("Test de vulnerabilites de $USERNAME/$IMAGE_NAME:$IMAGE_TAG") {
            agent any
            steps {
-               echo 'PASSED'
+               script{
+                   sh '''
+                       echo 'PASSED' || true
+                   '''               
+               }
            }
        }
     
@@ -54,7 +58,11 @@ pipeline {
         stage ('Deploiement automatique de env-test via terraform') {
            agent any
            steps {
-               echo 'PASSED'
+               script{
+                   sh '''
+                       echo 'PASSED' || true
+                   '''               
+               }
            }
        }
 
@@ -62,21 +70,33 @@ pipeline {
         stage ('Test de env-test') {
            agent any
            steps {
-               echo 'PASSED'
+               script{
+                   sh '''
+                       echo 'PASSED' || true
+                   '''               
+               }
            }
        }
 
         stage ('Deploiement manuel de env-prod apres validation de env-test') {
            agent any
            steps {
-               echo 'PASSED'
+               script{
+                   sh '''
+                       echo 'PASSED' || true
+                   '''               
+               }
            }
        }
 
         stage ('Test de env-prod') {
            agent any
            steps {
-               echo 'PASSED'
+               script{
+                   sh '''
+                       echo 'PASSED' || true
+                   '''               
+               }
            }
        }
     }
