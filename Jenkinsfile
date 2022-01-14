@@ -26,9 +26,9 @@ pipeline {
 
         stage('Test de vulnerabilites avec SNYK') {
             agent any
-            environment{
-               PASSWORD = credentials('snyk_token')
-                }
+            //environment{
+            //   PASSWORD = credentials('snyk_token')
+            //}
             tools {
                 snyk 'snyk-latest'
             }	
@@ -37,7 +37,7 @@ pipeline {
                   organisation: 'djoseph14',
                   severity: 'high',
                   snykInstallation: 'snyk-latest',
-                  snykTokenId: '${PASSWORD}',
+                  snykTokenId: 'snyk_token',
                   targetFile: 'Dockerfile',
                   failOnIssues: 'true'
                     )		
