@@ -30,6 +30,7 @@ pipeline {
                 docker {
                     image 'snyk/snyk-cli:python-3'
                     }
+                }
             environment {
                 SNYK_TOKEN = credentials('snyk_token')
                 }	
