@@ -39,7 +39,6 @@ pipeline {
                   snykTokenId: '$SNYK_TOKEN',
                   targetFile: 'Dockerfile',
                   failOnIssues: 'false'
-                  additionalArguments: '--all-sub-projects --debug'
                     )		
                 }
             }                
