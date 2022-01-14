@@ -30,12 +30,15 @@ pipeline {
            tools {
                snyk 'snyk-latest'
            }
+           environment{
+               PASSWORD = credentials('snyk_token')
+           }
            steps {
                snykSecurity(
                    organisation: 'icgroup',
                    severity: 'high',
                    snykInstallation: 'snyk-latest',
-                   snykTokenId: 'snyk_token',
+                   snykTokenId: '$PASSWORD',
                    //dockerImageName: '$USERNAME/$IMAGE_NAME:$IMAGE_TAG',
                    targetFile: 'Dockerfile',
                    failOnIssues: 'true'
