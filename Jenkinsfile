@@ -22,7 +22,7 @@ pipeline {
            }
        }
 
-        stage ('Test de vulnerabilites de $USERNAME/$IMAGE_NAME:$IMAGE_TAG') {
+        stage ("Test de vulnerabilites de $USERNAME/$IMAGE_NAME:$IMAGE_TAG") {
            agent any
            steps {
                script{ sh '''
