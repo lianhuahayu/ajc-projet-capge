@@ -25,16 +25,18 @@ pipeline {
        }
 
         stage('Test de vulnerabilites avec SNYK') {
-            agent any
-            environment {
-                SNYK_TOKEN = credentials('snyk_token')
-                }	
-            
+            tools {
+                snyk 'snyk-latest'
+            }	
             steps {
-                sh """
-                    snyk auth  ${SNYK_TOKEN}
-                    snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG --file=Dockerfile --project-name=ajc-projet-capge --org=djoseph14 --severity-threshold=high --json
-                """		
+                snykSecurity(
+                  organisation: 'djoseph14',
+                  severity: 'high',
+                  snykInstallation: 'snyk-latest',
+                  snykTokenId: 'snyk_token',
+                  targetFile: 'Dockerfile',
+                  failOnIssues: 'true'
+                    )		
                 }
             }                
           
