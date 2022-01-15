@@ -68,9 +68,11 @@ pipeline {
            agent any
            steps {
                script{
-                   sh '''
-                       echo 'PASSED' || true
-                   '''               
+                    sh 'mkdir terraform_env_test',
+                    sh 'git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test'
+                    sh 'cd ./terraform_env_test'
+                    sh 'terraform init'
+                    sh 'terraform plan'
                     }
                 }
             }
