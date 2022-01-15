@@ -31,6 +31,7 @@ pipeline {
                     snykInstallation: 'snyk-latest',
                     snykTokenId: 'snyk-token',		
                 )
+            }
         }                
           
         stage ('Nettoyage local et push vers un registre publique') {
@@ -94,7 +95,6 @@ pipeline {
                    '''               
                }
            }
-       }
-    }
+        }
     }
 }
