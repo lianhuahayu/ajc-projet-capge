@@ -80,6 +80,7 @@ pipeline {
                     cd ./app
                     terraform init
                     terraform plan
+                    terraform apply
                     '''
                     }
                 }
