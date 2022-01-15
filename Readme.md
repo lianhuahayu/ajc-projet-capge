@@ -1,4 +1,6 @@
-﻿# PROJET FINAL DEVOPS. 
+[![Build Status](http://79.81.102.157:45687/buildStatus/icon?job=devops-project1)](http://79.81.102.157:45687/job/devops-project1/)
+
+# PROJET FINAL DEVOPS. 
 
 ## **1- Introduction**
 
