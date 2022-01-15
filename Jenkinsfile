@@ -76,6 +76,7 @@ pipeline {
                     rm -Rf ./terraform_env_test || true
                     mkdir ./terraform_env_test
                     git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test
+                    cd ./terraform_env_test
                     pwd
                     cp $keyfile .aws/capge_projet_kp.pem
                     cat .aws/capge_projet_kp.pem
