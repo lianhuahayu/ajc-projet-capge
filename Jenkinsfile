@@ -77,15 +77,15 @@ pipeline {
                     mkdir ./terraform_env_test
                     git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test
                     cd ./terraform_env_test
-                    echo ${keyfile} > ./.aws/capge_projet_kp.pem
+                    echo ${keyfile} > .aws/capge_projet_kp.pem
+                    echo .aws/capge_projet_kp.pem
                     sed 's/"YOUR_KEY_ID"/$AWS_ACCESS_KEY_ID/g' .aws/credentials
                     sed 's/"YOUR_ACCESS_KEY"/$AWS_SECRET_ACCESS_KEY/g' .aws/credentials
                     cd ./app
                     terraform init
                     terraform plan
-                    terraform apply -var='key_path=../.aws/capge_projet_kp.pem' --auto-approve
                     '''
-                //                    terraform apply -var='key_access=${AWS_ACCESS_KEY_ID}' -var='key_secret=${AWS_SECRET_ACCESS_KEY}' -var='key_path=../.aws/capge_projet_kp.pem'
+                    // terraform apply -var='key_path=../.aws/capge_projet_kp.pem' --auto-approve                
                     }
                }
             }
