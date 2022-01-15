@@ -11,7 +11,7 @@ pipeline {
     }
 
     agent none
-    // stages{
+    stages{
 //
   //      stage ('Build image ic-webapp'){
     //       agent any
