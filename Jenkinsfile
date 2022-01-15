@@ -5,6 +5,9 @@ pipeline {
         IMAGE_TAG = "1.0"
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
+        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        
     }
 
     agent none
@@ -25,14 +28,26 @@ pipeline {
        }
 
         stage('Test de vulnerabilites avec SNYK') {	
-            agent any
-            steps {
-                snykSecurity(
-                    snykInstallation: 'snyk-latest',
-                    snykTokenId: 'snyk-token',		
-                )
+            agent {
+                docker {
+                    image 'snyk/snyk-cli:python-3.8'
+                    }
             }
-        }                
+            environment {
+                SNYK_TOKEN = credentials('snyk-token')
+            }	
+            steps {
+                sh """
+                    pip install -r requirements.txt
+                    snyk auth ${SNYK_TOKEN}
+                    snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG \
+                        --json \
+                        --severity-threshold=high \
+                        --file=Dockerfile \
+                        --org=lianhuahayu 
+                    """			
+                }
+            }                
           
         stage ('Nettoyage local et push vers un registre publique') {
            agent any
@@ -95,6 +110,6 @@ pipeline {
                    '''               
                }
            }
-        }
+       }
     }
 }
