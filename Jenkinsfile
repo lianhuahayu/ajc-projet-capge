@@ -85,8 +85,8 @@ pipeline {
                     cd ./app
                     terraform init
                     terraform plan
-                    '''
-                    // terraform apply -var='key_path=../.aws/capge_projet_kp.pem' --auto-approve                
+                    terraform apply -var='key_path=../.aws/capge_projet_kp.pem' --auto-approve 
+                    '''               
                     }
                }
             }
