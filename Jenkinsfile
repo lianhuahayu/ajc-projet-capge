@@ -26,7 +26,7 @@ pipeline {
 
         stage('Test de vulnerabilites avec SNYK') {	
             agent {
-                docker {
+                label 'docker' {
                     image 'snyk/snyk-cli:python-3.8'
                 }
             }
