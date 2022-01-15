@@ -25,26 +25,13 @@ pipeline {
        }
 
         stage('Test de vulnerabilites avec SNYK') {	
-            agent {
-                label 'docker' {
-                    image 'snyk/snyk-cli:python-3.8'
-                }
-            }
-            environment {
-                SNYK_TOKEN = credentials('snyk-token')
-            }	
+            agent any
             steps {
-                sh """
-                    pip install -r requirements.txt
-                    snyk auth ${SNYK_TOKEN}
-                    snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG \
-                        --json \
-                        --severity-threshold=high \
-                        --file=Dockerfile \
-                        --org=lianhuahayu 
-                    """			
-                }
-            }                
+                snykSecurity(
+                    snykInstallation: 'snyk-latest',
+                    snykTokenId: 'snyk-token',		
+                )
+        }                
           
         stage ('Nettoyage local et push vers un registre publique') {
            agent any
