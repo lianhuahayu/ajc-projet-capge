@@ -28,10 +28,10 @@ pipeline {
             agent {
                 docker {
                     image 'snyk/snyk-cli:python-3.8'
-                    }
+                }
             }
             environment {
-                SNYK_TOKEN = credentials('snyk_token')
+                SNYK_TOKEN = credentials('snyk-token')
             }	
             steps {
                 sh """
