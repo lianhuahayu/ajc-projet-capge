@@ -43,8 +43,8 @@ pipeline {
         //                --json \
         //                --severity-threshold=high
         //            """			
-                }
-            }                
+         //       }
+         //   }                
           
         stage ('Nettoyage local et push vers un registre publique') {
            agent any
