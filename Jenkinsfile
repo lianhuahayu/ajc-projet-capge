@@ -83,8 +83,9 @@ pipeline {
                     cd ./app
                     terraform init
                     terraform plan
-                    terraform apply -var='key_access=${AWS_ACCESS_KEY_ID}' -var='key_secret=${AWS_SECRET_ACCESS_KEY}' -var='key_path=../.aws/capge_projet_kp.pem'
                     '''
+                    //                    terraform apply -var='key_access=${AWS_ACCESS_KEY_ID}' -var='key_secret=${AWS_SECRET_ACCESS_KEY}' -var='key_path=../.aws/capge_projet_kp.pem'
+
                     }
                }
             }
