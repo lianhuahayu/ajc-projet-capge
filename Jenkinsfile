@@ -30,7 +30,7 @@ pipeline {
         stage('Test de vulnerabilites avec SNYK') {	
             agent {
                 docker {
-                    image 'snyk/snyk-cli:python-3.8'
+                    image 'snyk/snyk-cli:python-3'
                     }
             }
             environment {
@@ -42,9 +42,7 @@ pipeline {
                     snyk auth ${SNYK_TOKEN}
                     snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG \
                         --json \
-                        --severity-threshold=high \
-                        --file=Dockerfile \
-                        --org=lianhuahayu 
+                        --severity-threshold=high
                     """			
                 }
             }                
