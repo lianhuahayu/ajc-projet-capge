@@ -72,7 +72,12 @@ pipeline {
            steps {
                script{
                     sh '''
-                    mkdir terraform_env_test
+                    if [[ ! -e ./terraform_env_test ]]; then
+                        mkdir ./terraform_env_test
+                    elif
+                        rm -Rf ./terraform_env_test
+                        mkdir ./terraform_env_test
+                    fi
                     git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test
                     cd ./terraform_env_test
                     sed 's/"YOUR_KEY_ID"/$AWS_ACCESS_KEY_ID/g' .aws/credentials
