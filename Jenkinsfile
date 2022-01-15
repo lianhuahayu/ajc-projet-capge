@@ -71,11 +71,16 @@ pipeline {
            }
            steps {
                script{
-                    sh 'mkdir terraform_env_test',
-                    sh 'git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test'
-                    sh 'cd ./terraform_env_test'
-                    sh 'terraform init'
-                    sh 'terraform plan'
+                    sh '''
+                    mkdir terraform_env_test',
+                    git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test'
+                    cd ./terraform_env_test'
+                    sed 's/"YOUR_KEY_ID"/$AWS_ACCESS_KEY_ID/g' .aws/credentials
+                    sed 's/"YOUR_ACCESS_KEY"/$AWS_SECRET_ACCESS_KEY/g' .aws/credentials
+                    cd ./app
+                    terraform init'
+                    terraform plan'
+                    '''
                     }
                 }
             }
