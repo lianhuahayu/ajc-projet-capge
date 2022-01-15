@@ -66,6 +66,9 @@ pipeline {
 
         stage ('Deploiement automatique de env-test via terraform') {
            agent any
+           tools {
+               terraform 'Terraform'
+           }
            steps {
                script{
                     sh 'mkdir terraform_env_test',
