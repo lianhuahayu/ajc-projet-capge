@@ -76,10 +76,8 @@ pipeline {
                     rm -Rf ./terraform_env_test || true
                     mkdir ./terraform_env_test
                     git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test
-                    cd ./terraform_env_test
-                    echo "toto" > test.txt
-                    cat test.txt
-                    echo ${keyfile} > .aws/capge_projet_kp.pem
+                    pwd
+                    cp $keyfile .aws/capge_projet_kp.pem
                     cat .aws/capge_projet_kp.pem
                     sed 's/"YOUR_KEY_ID"/$AWS_ACCESS_KEY_ID/g' .aws/credentials
                     sed 's/"YOUR_ACCESS_KEY"/$AWS_SECRET_ACCESS_KEY/g' .aws/credentials
