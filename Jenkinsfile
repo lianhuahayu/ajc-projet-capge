@@ -27,22 +27,22 @@ pipeline {
            }
        }
 
-        stage('Test de vulnerabilites avec SNYK') {	
-            agent {
-                docker {
-                    image 'snyk/snyk-cli:python-3'
-                    }
-            }
-            environment {
-                SNYK_TOKEN = credentials('snyk-token')
-            }	
-            steps {
-                sh """
-                    snyk auth ${SNYK_TOKEN}
-                    snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG \
-                        --json \
-                        --severity-threshold=high
-                    """			
+        //stage('Test de vulnerabilites avec SNYK') {	
+        //   agent {
+        //        docker {
+        //            image 'snyk/snyk-cli:python-3'
+        //            }
+        //    }
+        //    environment {
+        //        SNYK_TOKEN = credentials('snyk-token')
+        //    }	
+        //    steps {
+        //        sh """
+        //            snyk auth ${SNYK_TOKEN}
+        //            snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG \
+        //                --json \
+        //                --severity-threshold=high
+        //            """			
                 }
             }                
           
