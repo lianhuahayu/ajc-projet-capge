@@ -38,7 +38,6 @@ pipeline {
             }	
             steps {
                 sh """
-                    pip install -r requirements.txt
                     snyk auth ${SNYK_TOKEN}
                     snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG \
                         --json \
