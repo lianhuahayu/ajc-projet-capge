@@ -70,7 +70,7 @@ pipeline {
                terraform 'Terraform'
            }
            steps {
-               withCredentials([sshUserPrivateKey(credentialsId: "capge_key_pair", keyFileVariable: 'keyfile', usernameVariable: 'NUSER')]) 
+            withCredentials([sshUserPrivateKey(credentialsId: "capge_key_pair", keyFileVariable: 'keyfile', usernameVariable: 'NUSER')]) {
                script{
                     sh '''
                     rm -Rf ./terraform_env_test || true
@@ -86,8 +86,9 @@ pipeline {
                     terraform apply -var='key_access=${AWS_ACCESS_KEY_ID}' -var='key_secret=${AWS_SECRET_ACCESS_KEY}' -var='key_path=../.aws/capge_projet_kp.pem'
                     '''
                     }
-                }
+               }
             }
+        }
 
 
         stage ('Test de env-test') {
