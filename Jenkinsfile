@@ -83,7 +83,7 @@ pipeline {
                     cd ./app
                     terraform init
                     terraform plan
-                    terraform apply -var='key_path=../.aws/capge_projet_kp.pem' -var='ic-webapp_image=${USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}' --auto-approve || true
+                    terraform apply -var='key_path=../.aws/capge_projet_kp.pem' -var="ic-webapp_image={USERNAME/$IMAGE_NAME:$IMAGE_TAG" --auto-approve || true
                     '''               
                     }
                }
