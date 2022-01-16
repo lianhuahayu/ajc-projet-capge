@@ -36,13 +36,12 @@ pipeline {
         stage('snyk dependency scan') {
             agent any	
             steps {
-            sh """
+            sh '''
                 pwd
                 docker scan --login --token $SNYK_TOKEN
-                docker scan --json --file Dockerfile lianhuahayu/ic-webapp:1.0
+                docker scan --json --file Dockerfile lianhuahayu/ic-webapp:1.0 > resultats.json
                 grep 'message' resultats.json |  sed -r 's/^[^:]*:(.*)$/\1/'
-
-            """		
+            '''	
             }
         }
 
