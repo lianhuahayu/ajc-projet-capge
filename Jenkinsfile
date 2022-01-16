@@ -12,7 +12,7 @@ pipeline {
 
     tools {
         terraform 'Terraform'
-        snyk 'snyk-latest'
+
     }
 
     agent none
@@ -33,13 +33,19 @@ pipeline {
        }
 
         stage('Test de vulnerabilites avec SNYK') {	
-            steps {
             agent any
+            tools {
+                snyk 'snyk-latest'
+            }
+            steps {
                 script{ 
                     sh '''
                         pwd
                     '''    
                 }
+            }
+
+            steps{
                 snykSecurity(
                   snykInstallation: 'snyk-latest',
                   snykTokenId: 'snyk-token',
