@@ -6,7 +6,8 @@ pipeline {
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')  
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY') 
+        EC2_PROD = "ec2-54-235-230-173.compute-1.amazonaws.com" 
     }
 
     tools {
@@ -16,7 +17,7 @@ pipeline {
     agent none
     stages{
        
-/*       stage ('Build image ic-webapp'){
+       stage ('Build image ic-webapp'){
            agent any
            steps {
                script{
@@ -29,27 +30,21 @@ pipeline {
                }
            }
        }
-*/
-        //stage('Test de vulnerabilites avec SNYK') {	
-        //   agent {
-        //        docker {
-        //            image 'snyk/snyk-cli:python-3'
-        //            }
-        //    }
-        //    environment {
-        //        SNYK_TOKEN = credentials('snyk-token')
-        //    }	
-        //    steps {
-        //        sh """
-        //            snyk auth ${SNYK_TOKEN}
-        //            snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG \
-        //                --json \
-        //                --severity-threshold=high
-        //            """			
-         //       }
-         //   }                
-          
- /*     stage ('Nettoyage local et push vers un registre publique') {
+
+        stage('Test de vulnerabilites avec SNYK') {	
+            steps {
+                echo 'Testing...'
+                pwd
+                
+                snykSecurity(
+                  snykInstallation: 'snyk-latest',
+                  snykTokenId: 'snyk-token',
+                  // place other parameters here
+                )
+            }
+        }
+
+      /*stage ('Push vers un registre publique') {
            agent any
            environment{
                PASSWORD = credentials('token_dockerhub')
@@ -61,13 +56,12 @@ pipeline {
                        docker push $USERNAME/$IMAGE_NAME:$IMAGE_TAG
                        docker stop $CONTAINER_NAME || true
                        docker rm $CONTAINER_NAME || true
-                       docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG
-            /      '''
+                   '''
                 }
              }
-        }
-*/
-        stage ('Deploiement automatique de env-test via terraform') {
+        }*/
+
+        /*stage ('Deploiement automatique de env-test via terraform') {
            agent any
            steps {
             withCredentials([sshUserPrivateKey(credentialsId: "capge_key_pair", keyFileVariable: 'keyfile', usernameVariable: 'NUSER')]) {
@@ -90,9 +84,9 @@ pipeline {
                }
             }
         }
+*/
 
-
-        stage ('Test de env-test') {
+        /*stage ('Test de env-test') {
            agent any
            steps {
                script{
@@ -103,18 +97,7 @@ pipeline {
                 }
             }
 
-        stage ('Deploiement manuel de env-prod apres validation de env-test') {
-           agent any
-           steps {
-               script{
-                   sh '''
-                       echo 'PASSED' || true
-                   '''               
-                    }
-                }
-            }
-
-        stage ('Test de env-prod') {
+        stage ('Deploiement de prod env') {
            agent any
            steps {
             withCredentials([sshUserPrivateKey(credentialsId: "capge_key_pair", keyFileVariable: 'keyfile', usernameVariable: 'NUSER')]) {
@@ -124,12 +107,27 @@ pipeline {
                     }	
                    sh '''
                        cd ./terraform_env_test/app
-                       terraform destroy --auto-approve 
+                       terraform destroy --auto-approve || true
+                       docker tag $USERNAME/$IMAGE_NAME:$IMAGE_TAG $USERNAME/$IMAGE_NAME:latest
+                       docker push $USERNAME/$IMAGE_NAME:latest
+                       docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG
+                       docker rmi $USERNAME/$IMAGE_NAME:latest
                        echo "Fin"
                    '''               
                     }
                 }
             }
         }
+
+        stage ('Test de prod env') {
+           agent any
+           steps {
+               script{
+                   sh '''
+                       echo 'PASSED' || true
+                   '''               
+                    }
+                }
+        }*/
     }
 }
