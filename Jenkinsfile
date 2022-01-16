@@ -50,7 +50,7 @@ pipeline {
                   severity: 'high',
                   organisation: 'lianhuahayu',
                   projectName: 'ic-webapp',
-                  targetFile: 'Dockerfile.txt',
+                  targetFile: 'Dockerfile',
                   failOnIssues: 'false',
                   failOnError: 'false'
                   // place other parameters here
