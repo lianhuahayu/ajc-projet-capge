@@ -33,12 +33,18 @@ pipeline {
 
         stage('Test de vulnerabilites avec SNYK') {	
             steps {
-                echo 'Testing...'
-                pwd
-                
+                script{ 
+                    sh '''
+                        pwd
+                    '''    
+                }
                 snykSecurity(
                   snykInstallation: 'snyk-latest',
                   snykTokenId: 'snyk-token',
+                  organisation: 'lianhuahayu',
+                  projectName: 'ic-webapp',
+                  failOnIssues: 'false',
+                  failOnError: 'false'
                   // place other parameters here
                 )
             }
