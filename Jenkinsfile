@@ -7,8 +7,7 @@ pipeline {
         CONTAINER_NAME = "test-ic-webapp"
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY') 
-        EC2_PROD = "ec2-54-235-230-173.compute-1.amazonaws.com"
-        SNYK_TOKEN = credentials('snyk-api-token') 
+        EC2_PROD = "ec2-54-235-230-173.compute-1.amazonaws.com" 
     }
 
     tools {
@@ -35,9 +34,13 @@ pipeline {
 
         stage('Scan avec SNYK de l\'image') {
             agent any	
+            environment{
+                SNYK_TOKEN = credentials('snyk-api-token')
+            }
             steps {
                 script{
                     sh '''
+                    pwd
                     docker scan --login --token $SNYK_TOKEN --accept-license"
                     docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json"
                     sh -c "grep 'message' resultats.json | sed -r 's/^[^:]*:(.*)$/\1/'"
