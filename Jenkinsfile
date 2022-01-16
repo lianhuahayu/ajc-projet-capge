@@ -44,7 +44,7 @@ pipeline {
                     ls
                     docker scan --login --token $SNYK_TOKEN --accept-license
                     docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultat.json
-                    message_json=`grep 'message' resultat.json
+                    message_json=`grep 'message' resultat.json`
                     echo "${message_json}"
                     OK=`grep 'ok' resultat.json`
                     echo "${OK}" 
