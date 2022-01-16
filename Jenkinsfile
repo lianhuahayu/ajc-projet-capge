@@ -41,11 +41,8 @@ pipeline {
                 script{ 
                     sh '''
                         pwd
-                    '''    
-                }
-            }
-
-            steps{
+                    '''
+                }    
                 snykSecurity(
                   snykInstallation: 'snyk-latest',
                   snykTokenId: 'snyk-token',
