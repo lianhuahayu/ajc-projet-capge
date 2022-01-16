@@ -83,7 +83,7 @@ pipeline {
                     cd ./app
                     terraform init
                     terraform plan
-                    terraform apply -var='key_path=../.aws/capge_projet_kp.pem' -var='ic-webapp_image=$USERNAME/$IMAGE_NAME:$IMAGE_TAG' --auto-approve 
+                    terraform apply -var='key_path=../.aws/capge_projet_kp.pem' -var='ic-webapp_image=${USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}' --auto-approve || true
                     '''               
                     }
                }
@@ -122,6 +122,7 @@ pipeline {
                         input message: "Confirmer le deploiement sur la production de l'image ? [Cette acton supprimera l'environnement de test]", ok: 'Yes'
                     }	
                    sh '''
+                       pwd
                        terraform destroy --auto-approve 
                    '''               
                     }
