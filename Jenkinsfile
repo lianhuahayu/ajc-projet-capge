@@ -33,6 +33,7 @@ pipeline {
 
         stage('Test de vulnerabilites avec SNYK') {	
             steps {
+            agent any
                 script{ 
                     sh '''
                         pwd
