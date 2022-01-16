@@ -24,8 +24,8 @@ pipeline {
                         input message: "Confirmer le deploiement sur la production de l'image ? [Cette acton supprimera l'environnement de test]", ok: 'Yes'
                     }	
                    sh '''
-                    IMAGE = 'ic-webapp_image=$USERNAME/$IMAGE_NAME:$IMAGE_TAG'
-                    echo $IMAGE
+                    IMAGE="ic-webapp_image=$USERNAME/$IMAGE_NAME:$IMAGE_TAG"
+                    echo ${IMAGE}
                     echo "Fin"
                    '''               
                     }
