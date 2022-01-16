@@ -53,6 +53,7 @@ pipeline {
                   targetFile: 'Dockerfile',
                   failOnIssues: 'false',
                   failOnError: 'false'
+                  additionalArguments: '--debug'
                   // place other parameters here
                 )
             }
