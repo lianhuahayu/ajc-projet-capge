@@ -15,8 +15,6 @@ pipeline {
 
     agent none
     stages{
-
-        
         stage ('Test variable') {
            agent any
            steps {
@@ -34,7 +32,8 @@ pipeline {
                 }
             }
         }
-        
+    }
+}       
 /*       stage ('Build image ic-webapp'){
            agent any
            steps {
@@ -150,6 +149,6 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
     }
-}
+}*/
