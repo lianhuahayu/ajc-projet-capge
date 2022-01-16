@@ -36,14 +36,12 @@ pipeline {
         stage('snyk dependency scan') {
             agent any	
             steps {
-            sh '''
-                pwd
-                docker scan --login --token $SNYK_TOKEN --accept-license
-                docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
-                grep 'message' resultats.json |  sed -r 's/^[^:]*:(.*)$/\1/'
-                OK=`grep 'ok' resultats.json | sed -r 's/^[^:]*:(.*)$/\1/'`
-                if [ $OK = 'true,' ]; then true; else false; fi
-            '''	
+                sh "docker scan --login --token $SNYK_TOKEN --accept-license"
+                sh "docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json"
+                sh -c "grep 'message' resultats.json |  sed -r 's/^[^:]*:(.*)$/\1/'"
+                sh -c "OK=`grep 'ok' resultats.json | sed -r 's/^[^:]*:(.*)$/\1/'`"
+                sh -c "if [ $OK = 'true,' ]; then true; else false; fi"
+
             }
         }
 
