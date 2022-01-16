@@ -124,6 +124,7 @@ pipeline {
                     }	
                    sh '''
                        pwd
+                       cd ./terraform_env_test/app
                        terraform destroy --auto-approve 
                    '''               
                     }
