@@ -43,9 +43,11 @@ pipeline {
                     pwd
                     docker scan --login --token $SNYK_TOKEN --accept-license
                     docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
-                    sh -c "grep 'message' resultats.json | sed -r 's/^[^:]*:(.*)$/\1/'"
-                    sh -c "OK=`grep 'ok' resultats.json | sed -r 's/^[^:]*:(.*)$/\1/'`"
-                    sh -c "if [ $OK = 'true,' ]; then true; else false; fi"
+                    def message_json = $/eval "grep 'message' resultats.json | sed -r 's/^[^:]*:(.*)$/\1/'"
+                    echo "${message_json}"
+                    def ok_json = $/eval "OK=`grep 'ok' resultats.json | sed -r 's/^[^:]*:(.*)$/\1/'`"
+                    def resultat_json = $/eval "if [ ${ok_json} = 'true,' ]; then true; else false; fi"
+                    echo "${resultat_json}"
                     '''
                 }
             }
