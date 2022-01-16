@@ -33,7 +33,7 @@ pipeline {
            }
        }*/
 
-        stage('snyk dependency scan') {
+        stage('Scan avec SNYK de l\'image') {
             agent any	
             steps {
                 script{
@@ -44,9 +44,9 @@ pipeline {
                     sh -c "OK=`grep 'ok' resultats.json | sed -r 's/^[^:]*:(.*)$/\1/'`"
                     sh -c "if [ $OK = 'true,' ]; then true; else false; fi"
                     '''
+                }
             }
         }
-
       /*stage ('Push vers un registre publique') {
            agent any
            environment{
