@@ -47,8 +47,7 @@ pipeline {
                     echo "${message_json}"
                     OK=`grep 'ok' resultats.json`
                     echo "${OK}"
-                    resultat_json=`if [ ${OK} = ' "ok":true,' ]; then true; else false; fi`
-                    echo "${resultat_json}"
+                    if [ ${OK} = ' "ok":true,' ]; then true; else false; fi
                     )
                     '''
                 }
