@@ -19,12 +19,10 @@ pipeline {
            agent any
            steps {
             withCredentials([sshUserPrivateKey(credentialsId: "capge_key_pair", keyFileVariable: 'keyfile', usernameVariable: 'NUSER')]) {
-               script{
-                    timeout(time: 15, unit: "MINUTES") {
-                        input message: "Confirmer le deploiement sur la production de l'image ? [Cette acton supprimera l'environnement de test]", ok: 'Yes'
-                    }	
+               script{	
                    sh '''
                     IMAGE="ic-webapp_image=$USERNAME/$IMAGE_NAME:$IMAGE_TAG"
+                    echo $IMAGE
                     echo ${IMAGE}
                     echo "Fin"
                    '''               
