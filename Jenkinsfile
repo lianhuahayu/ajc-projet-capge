@@ -38,8 +38,8 @@ pipeline {
             steps {
             sh '''
                 pwd
-                docker scan --login --token $SNYK_TOKEN
-                docker scan --json --file Dockerfile lianhuahayu/ic-webapp:1.0 > resultats.json
+                docker scan --login --token $SNYK_TOKEN --accept-license
+                docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
                 grep 'message' resultats.json |  sed -r 's/^[^:]*:(.*)$/\1/'
             '''	
             }
