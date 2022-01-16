@@ -35,7 +35,7 @@ pipeline {
         stage('snyk dependency scan') {
             agent any
             environment {
-                SNYK_TOKEN = credentials('snyk-token')
+                SNYK_TOKEN = credentials('snyk-api-token')
             }	
             steps {
             sh """
