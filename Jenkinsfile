@@ -52,7 +52,7 @@ pipeline {
                   projectName: 'ic-webapp',
                   targetFile: 'Dockerfile',
                   failOnIssues: 'false',
-                  failOnError: 'false'
+                  failOnError: 'false',
                   additionalArguments: '--debug'
                   // place other parameters here
                 )
