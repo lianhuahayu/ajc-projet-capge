@@ -19,7 +19,7 @@ pipeline {
     agent none
     stages{
        
-       stage ('Build image ic-webapp'){
+       /*stage ('Build image ic-webapp'){
            agent any
            steps {
                script{
@@ -31,7 +31,7 @@ pipeline {
                   '''
                }
            }
-       }
+       }*/
 
         stage('snyk dependency scan') {
             agent any	
@@ -41,6 +41,8 @@ pipeline {
                 docker scan --login --token $SNYK_TOKEN --accept-license
                 docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
                 grep 'message' resultats.json |  sed -r 's/^[^:]*:(.*)$/\1/'
+                OK=`grep 'ok' resultats.json | sed -r 's/^[^:]*:(.*)$/\1/'`
+                if [ $OK = 'true,' ]; then true; else false; fi
             '''	
             }
         }
