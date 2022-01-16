@@ -81,6 +81,7 @@ pipeline {
                     sed 's/"YOUR_KEY_ID"/$AWS_ACCESS_KEY_ID/g' .aws/credentials
                     sed 's/"YOUR_ACCESS_KEY"/$AWS_SECRET_ACCESS_KEY/g' .aws/credentials
                     cd ./app
+                    pwd
                     terraform init
                     terraform plan
                     terraform apply -var='key_path=../.aws/capge_projet_kp.pem' -var="ic-webapp_image={USERNAME/$IMAGE_NAME:$IMAGE_TAG" --auto-approve || true
