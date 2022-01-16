@@ -32,30 +32,25 @@ pipeline {
            }
        }
 
-        stage('Test de vulnerabilites avec SNYK') {	
+        stage('snyk dependency scan') {
             agent any
-            tools {
-                snyk 'snyk-latest'
-            }
+            environment {
+                SNYK_TOKEN = credentials('snyk-token')
+            }	
             steps {
-                script{ 
-                    sh '''
-                        pwd
-                        ls
-                    '''
-                }    
-                snykSecurity(
-                  snykInstallation: 'snyk-latest',
-                  snykTokenId: 'snyk-token',
-                  severity: 'high',
-                  organisation: 'lianhuahayu',
-                  projectName: 'ic-webapp',
-                  targetFile: 'Dockerfile',
-                  failOnIssues: 'false',
-                  failOnError: 'false',
-                  additionalArguments: '--debug'
-                  // place other parameters here
-                )
+            sh """
+                sudo apt-get update -y || true
+                sudo apt-get install npm -y || true
+                sudo npm install -g snyk -y || true
+                snyk auth ${SNYK_TOKEN}
+                pwd
+                ls
+                snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG --json \
+                --file=Dockerfile \
+                --org=lianhuahayu \
+                --project-name=ic-webapp \
+                --json
+            """		
             }
         }
 
