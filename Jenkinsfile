@@ -7,9 +7,8 @@ pipeline {
         CONTAINER_NAME = "test-ic-webapp"
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')  
-
-
     }
+
     tools {
         terraform 'Terraform'
     }
@@ -104,9 +103,6 @@ pipeline {
             }
 
         stage ('Deploiement manuel de env-prod apres validation de env-test') {
-        
-            
-
            agent any
            steps {
                script{
@@ -128,8 +124,9 @@ pipeline {
                    sh '''
                        terraform destroy --auto-approve 
                    '''               
-               }
-           }
-       }
+                    }
+                }
+            }
+        }
     }
 }
