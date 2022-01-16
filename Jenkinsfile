@@ -41,13 +41,16 @@ pipeline {
                 script{ 
                     sh '''
                         pwd
+                        ls
                     '''
                 }    
                 snykSecurity(
                   snykInstallation: 'snyk-latest',
                   snykTokenId: 'snyk-token',
+                  severity: 'high',
                   organisation: 'lianhuahayu',
                   projectName: 'ic-webapp',
+                  targetFile: 'Dockerfile.txt',
                   failOnIssues: 'false',
                   failOnError: 'false'
                   // place other parameters here
