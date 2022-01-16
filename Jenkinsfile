@@ -40,14 +40,13 @@ pipeline {
             steps {
                 script{
                     sh '''
-                    pwd
                     docker scan --login --token $SNYK_TOKEN --accept-license
                     docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
                     message_json=`grep 'message' resultats.json`
                     echo "${message_json}"
                     OK=`grep 'ok' resultats.json`
                     echo "${OK}"
-                    if [ ${OK} = ' "ok":true,' ]; then
+                    if [ ${OK} = '  "ok": true,' ]; then
                         true
                     else 
                         false
