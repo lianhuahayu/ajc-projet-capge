@@ -12,6 +12,7 @@ pipeline {
 
     tools {
         terraform 'Terraform'
+        snyk 'snyk-latest'
     }
 
     agent none
