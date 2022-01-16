@@ -7,7 +7,8 @@ pipeline {
         CONTAINER_NAME = "test-ic-webapp"
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY') 
-        EC2_PROD = "ec2-54-235-230-173.compute-1.amazonaws.com" 
+        EC2_PROD = "ec2-54-235-230-173.compute-1.amazonaws.com"
+        SNYK_TOKEN = credentials('snyk-api-token') 
     }
 
     tools {
@@ -33,13 +34,14 @@ pipeline {
        }
 
         stage('snyk dependency scan') {
-            agent any
-            environment {
-                SNYK_TOKEN = credentials('snyk-api-token')
-            }	
+            agent any	
             steps {
             sh """
-                docker scan --version
+                pwd
+                docker scan --login --token $SNYK_TOKEN
+                docker scan --json --file Dockerfile lianhuahayu/ic-webapp:1.0
+                grep 'message' resultats.json |  sed -r 's/^[^:]*:(.*)$/\1/'
+
             """		
             }
         }
