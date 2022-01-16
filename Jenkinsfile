@@ -15,23 +15,7 @@ pipeline {
 
     agent none
     stages{
-        stage ('Test variable') {
-           agent any
-           steps {
-            withCredentials([sshUserPrivateKey(credentialsId: "capge_key_pair", keyFileVariable: 'keyfile', usernameVariable: 'NUSER')]) {
-               script{	
-                   sh '''
-                    IMAGE="ic-webapp_image=$USERNAME/$IMAGE_NAME:$IMAGE_TAG"
-                    echo $IMAGE
-                    echo ${IMAGE}
-                    echo "Fin"
-                   '''               
-                    }
-                }
-            }
-        }
-    }
-}       
+       
 /*       stage ('Build image ic-webapp'){
            agent any
            steps {
@@ -83,7 +67,7 @@ pipeline {
              }
         }
 */
-        /*stage ('Deploiement automatique de env-test via terraform') {
+        stage ('Deploiement automatique de env-test via terraform') {
            agent any
            steps {
             withCredentials([sshUserPrivateKey(credentialsId: "capge_key_pair", keyFileVariable: 'keyfile', usernameVariable: 'NUSER')]) {
@@ -99,9 +83,8 @@ pipeline {
                     cd ./app
                     terraform init
                     terraform plan
-                    IMAGE = 'ic-webapp_image=$USERNAME/$IMAGE_NAME:$IMAGE_TAG'
-                    echo $IMAGE
-                    terraform apply -var='key_path=../.aws/capge_projet_kp.pem' -var="ic-webapp_image={USERNAME/$IMAGE_NAME:$IMAGE_TAG" --auto-approve || true
+                    IMAGE="ic-webapp_image=$USERNAME/$IMAGE_NAME:$IMAGE_TAG"
+                    terraform apply -var='key_path=../.aws/capge_projet_kp.pem' -var=${IMAGE} --auto-approve
                     '''               
                     }
                }
@@ -149,4 +132,4 @@ pipeline {
             }
         }
     }
-}*/
+}
