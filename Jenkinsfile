@@ -39,17 +39,7 @@ pipeline {
             }	
             steps {
             sh """
-                sudo apt-get update -y || true
-                sudo apt-get install npm -y || true
-                sudo npm install -g snyk -y || true
-                snyk auth ${SNYK_TOKEN}
-                pwd
-                ls
-                snyk container test $USERNAME/$IMAGE_NAME:$IMAGE_TAG --json \
-                --file=Dockerfile \
-                --org=lianhuahayu \
-                --project-name=ic-webapp \
-                --json
+                docker scan --version
             """		
             }
         }
