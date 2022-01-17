@@ -1,13 +1,13 @@
 pipeline {
 
     environment {
-        IMAGE_NAME = "ic-webapp"
-        IMAGE_TAG = readFile(releases.txt)
-        USERNAME = "lianhuahayu"
-        CONTAINER_NAME = "test-ic-webapp"
-        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY') 
-        EC2_PROD = "ec2-54-235-230-173.compute-1.amazonaws.com" 
+        env.IMAGE_NAME = "ic-webapp"
+        env.IMAGE_TAG = readFile(releases.txt)
+        env.USERNAME = "lianhuahayu"
+        env.CONTAINER_NAME = "test-ic-webapp"
+        env.AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+        env.AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY') 
+        env.EC2_PROD = "ec2-54-235-230-173.compute-1.amazonaws.com" 
     }
 
     tools {
@@ -22,7 +22,7 @@ pipeline {
            steps {
                script{
                    sh'''
-                    echo $(cut -d':' -f2 $IMAGE_TAG)
+                    echo $(cut -d':' -f2 $env.IMAGE_TAG)
                     '''
                }
            }
