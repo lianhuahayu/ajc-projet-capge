@@ -39,7 +39,7 @@ pipeline {
             }
             steps {
                 script{
-                    sh '''
+                    sh '''#!/bin/bash
                     echo "Scan de l'image en cours ..."
                     docker scan --login --token $SNYK_TOKEN --accept-license
                     docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
@@ -67,6 +67,8 @@ pipeline {
                     test3=`cut -d'"' -f2 <(echo $test3)`
                     echo ${test3}
                     if [ "${test3}" = 'https://www.pgadmin.org/' ]; then echo "pass test3"; else echo "false test3 ${test3}"; fi
+                    
+                    exit 0
                     '''
                 }
             }
