@@ -1,6 +1,8 @@
 pipeline {
 
     environment {
+        def image_tag = readFile(file: 'releases.txt').split(' ')[1]
+        IMAGE_TAG = println(image_tag)
         IMAGE_NAME = "ic-webapp"
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
@@ -20,7 +22,7 @@ pipeline {
            agent any
            steps {
                script{
-                   def image_tag = readFile(file: 'releases.txt').split(':')[1]
+                   def image_tag = readFile(file: 'releases.txt').split(' ')[1]
                    println(image_tag)
                }
            }
