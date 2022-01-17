@@ -52,10 +52,11 @@ pipeline {
                     
                     docker run -d --name $CONTAINER_NAME -p:8090:8080 $USERNAME/$IMAGE_NAME:$IMAGE_TAG
                     
-                    test1=`head -n 1 <(curl -Is http://localhost:8090)`
-                    test1=`sed 's/\r$//' <(echo $test1)`
-                    echo ${test1}
-                    if [ "${test1}" = 'HTTP/1.0 200 OK' ]; then echo "pass test1"; else echo "false test1 ${test1}"; fi
+                    curl -Is http://localhost:8090) > test1.log
+                    head -n1 test1.log > test1.log
+                    sed -i 's/\r$//' > test1.log
+                    cat test1.log
+                    if [ `cat test1.log` = 'HTTP/1.0 200 OK' ]; then echo "pass"; else echo "false test1"; fi
                     
                     test2=`grep '<a href="https://www.odoo.com/' <(curl -s http://localhost:8090)`
                     test2=`cut -d'"' -f2 <(echo $test2)`
