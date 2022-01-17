@@ -126,7 +126,7 @@ pipeline {
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} "mkdir -p /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG || true"
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} "sudo git clone https://github.com/lianhuahayu/k8s_manifest.git /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/"
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} "sudo chmod u+x /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/apply_release.sh"
-                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} "sudo sh /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/apply_release.sh"
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} "sh /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/apply_release.sh"
                        echo "Fin du deploiement en prod"
                    '''               
                     }
