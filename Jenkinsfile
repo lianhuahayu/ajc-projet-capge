@@ -52,7 +52,7 @@ pipeline {
                     
                     docker run -d --name $CONTAINER_NAME -p:8090:8080 $USERNAME/$IMAGE_NAME:$IMAGE_TAG
                     
-                    curl -Is http://localhost:8090) > test1.log
+                    curl -Is http://localhost:8090 > test1.log
                     head -n1 test1.log > test1.log
                     sed -i 's/\r$//' > test1.log
                     cat test1.log
