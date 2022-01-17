@@ -77,10 +77,10 @@ pipeline {
                     aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
                     aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
                     aws configure set default.region us-east-1
-                    aws ec2 delete-instance --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-AnsibleMaster --query Reservations[].Instances[].InstanceId --output text` || true
-                    aws ec2 delete-instance --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-admin --query Reservations[].Instances[].InstanceId --output text` || true
-                    aws ec2 delete-instance --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-odoo --query Reservations[].Instances[].InstanceId --output text` || true
-                    aws ec2 delete-security-groups --group-id `aws ec2 describe-security-groups --filter Name=group-name,Values=capge-sg-dev --query 'SecurityGroups[*].[GroupId]' --output text` || true
+                    aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-AnsibleMaster --query Reservations[].Instances[].InstanceId --output text` || true
+                    aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-admin --query Reservations[].Instances[].InstanceId --output text` || true
+                    aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-odoo --query Reservations[].Instances[].InstanceId --output text` || true
+                    aws ec2 delete-security-group --group-id `aws ec2 describe-security-groups --filter Name=group-name,Values=capge-sg-dev --query 'SecurityGroups[*].[GroupId]' --output text` || true
                     rm ~/.aws/credentials 
                     rm ~/.aws/config 
                     
