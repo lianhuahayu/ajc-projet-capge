@@ -114,12 +114,12 @@ pipeline {
                     }	
                    sh '''
                        echo "Push de la version finale en latest ..."
-                       cd ./terraform_env_test/app
+                       cd ./terraform_env_test/app || true
                        terraform destroy --auto-approve || true
-                       docker tag $USERNAME/$IMAGE_NAME:$IMAGE_TAG $USERNAME/$IMAGE_NAME:latest
-                       docker push $USERNAME/$IMAGE_NAME:latest
-                       docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG
-                       docker rmi $USERNAME/$IMAGE_NAME:latest
+                       docker tag $USERNAME/$IMAGE_NAME:$IMAGE_TAG $USERNAME/$IMAGE_NAME:latest || true
+                       docker push $USERNAME/$IMAGE_NAME:latest || true
+                       docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG || true
+                       docker rmi $USERNAME/$IMAGE_NAME:latest || true
                        
                        echo "Deploiement de la nouvelle application sur la prod ..."
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} rm -Rf /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG || true
