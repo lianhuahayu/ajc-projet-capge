@@ -18,7 +18,7 @@ pipeline {
     agent none
     stages{
        
-       stage ('Build image ic-webapp'){
+       /*stage ('Build image ic-webapp'){
            agent any
            steps {
                script{
@@ -102,7 +102,7 @@ pipeline {
                    '''               
                 }
             }
-        }
+        }*/
 
         stage ('Deploiement de prod env') {
            agent any
@@ -122,13 +122,12 @@ pipeline {
                        docker rmi $USERNAME/$IMAGE_NAME:latest
                        
                        echo "Deploiement de la nouvelle application sur la prod ..."
-                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} rm -Rf ~/prod/deploy/ic-webapp/$IMAGE_TAG || true
-                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} mkdir -p ~/prod/deploy/ic-webapp/$IMAGE_TAG/ || true
-                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} cd ~/prod/deploy/ic-webapp/$IMAGE_TAG/
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} rm -Rf /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG || true
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} mkdir -p /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/ || true
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} cd /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} git clone https://github.com/lianhuahayu/k8s_manifest.git
-                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} cd k8s_manifest/
-                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo chmod u+x apply_release.sh
-                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo ./apply_release.sh
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo chmod u+x ./k8s_manifest/apply_release.sh
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo ./k8s_manifest/apply_release.sh
 
                        echo "Fin du deploiement en prod"
                    '''               
