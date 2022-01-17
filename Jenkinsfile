@@ -2,7 +2,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "ic-webapp"
-        IMAGE_TAG = readFile('releases.txt')
+        IMAGE_TAG = "1.0"
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
@@ -21,9 +21,8 @@ pipeline {
            agent any
            steps {
                script{
-                   sh'''
-                    echo $(cut -d':' -f2 $IMAGE_TAG)
-                    '''
+                    def data = readFile(file: 'releases.txt')
+                    println(data)
                }
            }
        }
