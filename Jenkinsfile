@@ -7,12 +7,13 @@ pipeline {
         CONTAINER_NAME = "test-ic-webapp"
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY') 
-        EC2_PROD = "ec2-54-235-230-173.compute-1.amazonaws.com" 
+        SNYK_TOKEN = credentials('snyk-api-token')
+        EC2_PROD = "ec2-54-235-230-173.compute-1.amazonaws.com"
+         
     }
 
     tools {
         terraform 'Terraform'
-
     }
 
     agent none
@@ -34,9 +35,6 @@ pipeline {
 
         stage('Scan avec SNYK de l\'image') {
             agent any	
-            environment{
-                SNYK_TOKEN = credentials('snyk-api-token')
-            }
             steps {
                 script{
                     sh '''#!/bin/bash
@@ -75,8 +73,18 @@ pipeline {
             withCredentials([sshUserPrivateKey(credentialsId: "capge_key_pair", keyFileVariable: 'keyfile', usernameVariable: 'NUSER')]) {
                script{
                     sh '''
+                    
+                    aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+                    aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+                    aws configure set default.region us-east-1
+                    aws ec2 delete-instance --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-AnsibleMaster --query Reservations[].Instances[].InstanceId --output text` || true
+                    aws ec2 delete-instance --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-admin --query Reservations[].Instances[].InstanceId --output text` || true
+                    aws ec2 delete-instance --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-odoo --query Reservations[].Instances[].InstanceId --output text` || true
+                    aws ec2 delete-security-groups --group-id `aws ec2 describe-security-groups --filter Name=group-name,Values=capge-sg-dev --query 'SecurityGroups[*].[GroupId]' --output text` || true
+                    rm ~/.aws/credentials 
+                    rm ~/.aws/config 
+                    
                     rm -Rf ./terraform_env_test || true
-                    mkdir ./terraform_env_test
                     git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test
                     cd ./terraform_env_test
                     cp $keyfile .aws/capge_projet_kp.pem
@@ -125,7 +133,7 @@ pipeline {
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} "sudo rm -Rf /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG || true"
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} "sudo git clone https://github.com/lianhuahayu/k8s_manifest.git /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/"
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} "sudo chmod u+x /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/apply_release.sh"
-                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} "export IMAGE_TAG=$IMAGE_TAG && sh /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/apply_release.sh"
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} "export IMAGE_TAG=$IMAGE_TAG && sh /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/apply_release.sh" 
                        echo "Fin du deploiement en prod "
                    '''               
                     }
