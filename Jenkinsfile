@@ -54,14 +54,17 @@ pipeline {
                     
                     test1=`head -n 1 <(curl -Is http://localhost:8090)`
                     test1=`sed 's/\r$//' <(echo $test1)`
+                    echo ${test1}
                     if [ "${test1}" = 'HTTP/1.0 200 OK' ]; then echo "pass test1"; else echo "false test1 ${test1}"; fi
                     
                     test2=`grep '<a href="https://www.odoo.com/' <(curl -s http://localhost:8090)`
                     test2=`cut -d'"' -f2 <(echo $test2)`
+                    echo ${test2}
                     if [ "${test2}" = 'https://www.odoo.com/' ]; then echo "pass test2"; else echo "false test2 ${test2}"; fi
                     
                     test3=`grep '<a href="https://www.pgadmin.org/' <(curl -s http://localhost:8090)`
                     test3=`cut -d'"' -f2 <(echo $test3)`
+                    echo ${test3}
                     if [ "${test3}" = 'https://www.pgadmin.org/' ]; then echo "pass test3"; else echo "false test3 ${test3}"; fi
                     
                     exit 0
