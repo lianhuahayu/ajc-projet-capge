@@ -54,15 +54,15 @@ pipeline {
                     
                     test1=`head -n 1 <(curl -Is http://localhost:8090)`
                     test1=`sed 's/\r$//' <(echo $test1)`
-                    if [ "${test1}" = 'HTTP/1.0 200 OK' ]; then true; else exit 1; fi
+                    if [ "${test1}" = 'HTTP/1.0 200 OK' ]; then true; else echo "false"; fi
                     
                     test2=`grep '<a href="https://www.odoo.com/' <(curl -s http://localhost:8090)`
                     test2=`cut -d'"' -f2 <(echo $test2)`
-                    if [ "${test2}" = 'https://www.odoo.com/' ]; then true; else exit 1; fi
+                    if [ "${test2}" = 'https://www.odoo.com/' ]; then true; else echo "false"; fi
                     
                     test3=`grep '<a href="https://www.pgadmin.org/' <(curl -s http://localhost:8090)`
                     test3=`cut -d'"' -f2 <(echo $test3)`
-                    if [ "${test3}" = 'https://www.pgadmin.org/' ]; then true; else exit 1; fi
+                    if [ "${test3}" = 'https://www.pgadmin.org/' ]; then true; echo "false"; fi
                     
                     exit 0
                     '''
