@@ -39,7 +39,7 @@ pipeline {
             }
             steps {
                 script{
-                    sh '''
+                    sh '''#!/bin/bash
                     echo "Scan de l'image en cours ..."
                     docker scan --login --token $SNYK_TOKEN --accept-license
                     docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
@@ -50,7 +50,9 @@ pipeline {
                     
                     echo "Test des variables d'environnements de l'image en cours ..."
                     docker run -d --name $CONTAINER_NAME -p:8090:8080 $USERNAME/$IMAGE_NAME:$IMAGE_TAG
+                    curl -Is http://localhost:8090
                     test1=`head -n 1 <(curl -Is http://localhost:8090)`
+                    echo $head
                     if [ "${test1}" = 'HTTP/1.1 200 OK' ]; then true; else false; fi
                     test2=`grep '<a href="https://www.odoo.com/' <(curl -s http://localhost:8090)`
                     test2=`cut -d'"' -f2 <(echo $test2)`
