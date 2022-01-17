@@ -55,7 +55,8 @@ pipeline {
                     curl -Is http://localhost:8090 > test1.log
                     sed -i 's/\r$//' test1.log > test1.log
                     cat test1.log
-                    if [ "$(head -n 1 test1.log)" = 'HTTP/1.0 200 OK' ]; then echo "pass"; else echo "false test1"; fi
+                    test1=''HTTP/1.0 200 OK' 
+                    if [ "${test1}" = 'HTTP/1.0 200 OK' ]; then echo "pass"; else echo "false test1"; fi
                     
                     test2=`grep '<a href="https://www.odoo.com/' <(curl -s http://localhost:8090)`
                     test2=`cut -d'"' -f2 <(echo $test2)`
