@@ -66,7 +66,6 @@ pipeline {
                     test3=`cut -d'"' -f2 <(echo $test3)`
                     echo ${test3}
                     if [ "${test3}" = 'https://www.pgadmin.org/' ]; then true; else false; fi
-                    exit 0
                     '''
                 }
             }
