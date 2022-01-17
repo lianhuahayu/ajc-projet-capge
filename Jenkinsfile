@@ -122,8 +122,8 @@ pipeline {
                        docker rmi $USERNAME/$IMAGE_NAME:latest || true
                        
                        echo "Deploiement de la nouvelle application sur la prod ..."
-                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo rm -Rf /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/* || true
-                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} mkdir -p /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/ || true
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo rm -Rf /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG || true
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} mkdir -p /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG || true
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo git clone https://github.com/lianhuahayu/k8s_manifest.git /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo chmod u+x /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/apply_release.sh
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo sh /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/apply_release.sh
