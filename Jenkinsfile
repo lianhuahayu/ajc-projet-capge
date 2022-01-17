@@ -2,14 +2,13 @@ pipeline {
 
     environment {
         IMAGE_NAME = "ic-webapp"
+        IMAGE_TAG = readFile('releases.txt')
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY') 
         EC2_PROD = "ec2-54-235-230-173.compute-1.amazonaws.com" 
     }
-
-    def IMAGE_TAG = readFile(releases.txt)
 
     tools {
         terraform 'Terraform'
