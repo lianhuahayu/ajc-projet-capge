@@ -2,7 +2,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "ic-webapp"
-        IMAGE_TAG = readFile(releases.txt).trim()
+        IMAGE_TAG = readFile(releases.txt)
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
@@ -22,7 +22,7 @@ pipeline {
            steps {
                script{
                    sh'''
-                    echo $IMAGE_TAG
+                    echo $(cut -d':' -f2 $IMAGE_TAG)
                     '''
                }
            }
