@@ -122,7 +122,7 @@ pipeline {
                        docker rmi $USERNAME/$IMAGE_NAME:latest || true
                        
                        echo "Deploiement de la nouvelle application sur la prod ..."
-                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} rm -Rf /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG || true
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo rm -Rf /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG || true
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} mkdir -p /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/ || true
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} cd /home/$NUSER/prod/deploy/ic-webapp/$IMAGE_TAG/
                        ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} git clone https://github.com/lianhuahayu/k8s_manifest.git
