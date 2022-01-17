@@ -82,11 +82,7 @@ pipeline {
                     aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-odoo --query Reservations[].Instances[].InstanceId --output text` || true
                     aws ec2 delete-security-group --group-id `aws ec2 describe-security-groups --filter Name=group-name,Values=capge-sg-dev --query 'SecurityGroups[*].[GroupId]' --output text` || true
                     sleep 15
-                    rm ~/.aws/credentials 
-                    rm ~/.aws/config 
-
-                    
-                    
+à
                     rm -Rf ./terraform_env_test || true
                     git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test
                     cd ./terraform_env_test
@@ -98,6 +94,10 @@ pipeline {
                     terraform plan
                     IMAGE="ic-webapp_image=$USERNAME/$IMAGE_NAME:$IMAGE_TAG"
                     terraform apply -var='key_path=../.aws/capge_projet_kp.pem' -var=${IMAGE} --auto-approve
+                    
+                    aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-AnsibleMaster --query Reservations[].Instances[].InstanceId --output text`
+                    rm ~/.aws/credentials 
+                    rm ~/.aws/config 
                     '''               
                     }
                }
