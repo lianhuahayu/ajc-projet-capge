@@ -49,11 +49,11 @@ pipeline {
                     echo "Fin du scan de l'image"
                     echo "Test des variables d'environnements de l'image en cours ..."
                     docker run -d --name $CONTAINER_NAME -p:8090:8080 $USERNAME/$IMAGE_NAME:$IMAGE_TAG
-                    essaiAppli=`curl -Is http://localhost |head -n 1`
+                    essaiAppli=`curl -Is http://localhost:8090 |head -n 1`
                     if [ ${essaiAppli} = 'HTTP/1.1 200 OK' ]; then true; else false; fi
-                    essaiEnvUN=`curl -s http://localhost:8090 |grep '<a href="https://www.odoo.com/' |tr -d ' ' |cut -d'"' -f2`
+                    essaiEnvUN=`curl -s http://localhost:8090 | grep '<a href="https://www.odoo.com/' | tr -d ' ' | cut -d'"' -f2`
                     if [ ${essaiEnvUN} = 'https://www.odoo.com/' ]; then true; else true; fi
-                    essaiEnvDEUX=`curl -s http://localhost:8090 |grep '<a href="https://www.pgadmin.org/' |tr -d ' ' |cut -d'"' -f2`
+                    essaiEnvDEUX=`curl -s http://localhost:8090 | grep '<a href="https://www.pgadmin.org/' | tr -d ' ' | cut -d'"' -f2`
                     if [ ${essaiEnvDEUX} = 'https://www.pgadmin.org/' ]; then true; else true; fi
                     '''
                 }
