@@ -18,7 +18,7 @@ pipeline {
     agent none
     stages{
        
-       /*stage ('Build image ic-webapp'){
+       stage ('Build image ic-webapp'){
            agent any
            steps {
                script{
@@ -102,7 +102,7 @@ pipeline {
                    '''               
                 }
             }
-        }*/
+        }
 
         stage ('Deploiement de prod env') {
            agent any
