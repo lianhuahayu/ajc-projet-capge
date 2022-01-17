@@ -1,9 +1,7 @@
 pipeline {
 
-    define {
-        def image_tag = readFile(file: 'releases.txt').split(':')[1]
-    }
     environment {
+        def image_tag = readFile(file: 'releases.txt').split(':')[1]
         IMAGE_NAME = "ic-webapp"
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
