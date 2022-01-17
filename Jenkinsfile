@@ -1,7 +1,7 @@
 pipeline {
 
     environment {
-        IMAGE_TAG = readFile(file: 'releases.txt').trim()
+        def IMAGE_TAG = readFile(file: 'releases.txt')
         IMAGE_NAME = "ic-webapp"
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
@@ -21,7 +21,9 @@ pipeline {
            agent any
            steps {
                script{
-                    println(IMAGE_TAG)
+                    sh'''
+                    echo $IMAGE_TAG
+                    '''
                }
            }
        }
