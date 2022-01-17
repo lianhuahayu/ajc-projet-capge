@@ -40,6 +40,7 @@ pipeline {
             steps {
                 script{
                     sh '''
+                    #!/bin/bash
                     echo "Scan de l'image en cours ..."
                     docker scan --login --token $SNYK_TOKEN --accept-license
                     docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
