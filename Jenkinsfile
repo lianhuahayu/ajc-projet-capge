@@ -81,8 +81,11 @@ pipeline {
                     aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-admin --query Reservations[].Instances[].InstanceId --output text` || true
                     aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=capge-dev-odoo --query Reservations[].Instances[].InstanceId --output text` || true
                     aws ec2 delete-security-group --group-id `aws ec2 describe-security-groups --filter Name=group-name,Values=capge-sg-dev --query 'SecurityGroups[*].[GroupId]' --output text` || true
+                    sleep 15
                     rm ~/.aws/credentials 
                     rm ~/.aws/config 
+
+                    
                     
                     rm -Rf ./terraform_env_test || true
                     git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test
