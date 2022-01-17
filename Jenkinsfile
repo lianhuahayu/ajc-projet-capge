@@ -39,7 +39,7 @@ pipeline {
             }
             steps {
                 script{
-                    sh '''#!/bin/bash
+                    sh '''
                     echo "Scan de l'image en cours ..."
                     docker scan --login --token $SNYK_TOKEN --accept-license
                     docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
@@ -47,6 +47,7 @@ pipeline {
                     OK=`grep 'ok' resultats.json`
                     if [ "${OK}" = '  "ok": true,' ]; then true; else echo false; fi
                     echo "Fin du scan de l'image"
+                    
                     echo "Test des variables d'environnements de l'image en cours ..."
                     docker run -d --name $CONTAINER_NAME -p:8090:8080 $USERNAME/$IMAGE_NAME:$IMAGE_TAG
                     essaiAppli=`curl -Is http://localhost:8090 |head -n 1`
