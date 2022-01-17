@@ -54,7 +54,7 @@ pipeline {
                     
                     curl -Is http://localhost:8090
                     test1=`head -n 1 <(curl -Is http://localhost:8090)`
-                    echo $head
+                    echo ${test1}
                     if [ "${test1}" = 'HTTP/1.1 200 OK' ]; then true; else false; fi
                     
                     test2=`grep '<a href="https://www.odoo.com/' <(curl -s http://localhost:8090)`
