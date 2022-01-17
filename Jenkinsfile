@@ -22,15 +22,9 @@ pipeline {
            steps {
                script{
                    sh'''
-                      echo $IMAGE_TAG
+                    echo $IMAGE_TAG
                     '''
                }
-                                  /*sh '''
-                       docker stop $CONTAINER_NAME || true
-                       docker rm $CONTAINER_NAME || true
-                       docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG || true
-                       docker build -t $USERNAME/$IMAGE_NAME:$IMAGE_TAG .
-                  '''*/
            }
        }
 
