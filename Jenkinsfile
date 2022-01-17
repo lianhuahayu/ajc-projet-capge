@@ -47,34 +47,12 @@ pipeline {
                     OK=`grep 'ok' resultats.json`
                     if [ "${OK}" = '  "ok": true,' ]; then true; else echo false; fi
                     echo "Fin du scan de l'image"
-                    
-                    echo "Test des variables d'environnements de l'image en cours ..."
-                    
-                    docker run -d --name $CONTAINER_NAME -p:8090:8080 $USERNAME/$IMAGE_NAME:$IMAGE_TAG
-                    
-                    curl -Is http://localhost:8090 > test1.log
-                    sed -i 's/\r$//' test1.log > test1.log
-                    cat test1.log
-                    test1='HTTP/1.0 200 OK' 
-                    if [ "${test1}" = 'HTTP/1.0 200 OK' ]; then echo "pass"; else echo "false test1"; fi
-                    
-                    test2=`grep '<a href="https://www.odoo.com/' <(curl -s http://localhost:8090)`
-                    test2=`cut -d'"' -f2 <(echo $test2)`
-                    echo ${test2}
-                    if [ "${test2}" = 'https://www.odoo.com/' ]; then echo "pass test2"; else echo "false test2 ${test2}"; fi
-                    
-                    test3=`grep '<a href="https://www.pgadmin.org/' <(curl -s http://localhost:8090)`
-                    test3=`cut -d'"' -f2 <(echo $test3)`
-                    echo ${test3}
-                    if [ "${test3}" = 'https://www.pgadmin.org/' ]; then echo "pass test3"; else echo "false test3 ${test3}"; fi
-                    
-                    exit 0
                     '''
                 }
             }
         }
 
-      /*stage ('Push vers un registre publique') {
+      stage ('Push vers un registre publique') {
            agent any
            environment{
                PASSWORD = credentials('token_dockerhub')
@@ -89,9 +67,9 @@ pipeline {
                    '''
                 }
              }
-        }*/
+        }
 
-        /*stage ('Deploiement automatique de env-test via terraform') {
+        stage ('Deploiement automatique de env-test via terraform') {
            agent any
            steps {
             withCredentials([sshUserPrivateKey(credentialsId: "capge_key_pair", keyFileVariable: 'keyfile', usernameVariable: 'NUSER')]) {
@@ -114,18 +92,17 @@ pipeline {
                }
             }
         }
-*/
 
-        /*stage ('Test de env-test') {
+        stage ('Test de env-test') {
            agent any
            steps {
                script{
                    sh '''
                        echo 'PASSED' || true
                    '''               
-                    }
                 }
             }
+        }
 
         stage ('Deploiement de prod env') {
            agent any
@@ -136,13 +113,24 @@ pipeline {
                         input message: "Confirmer le deploiement sur la production de l'image ? [Cette acton supprimera l'environnement de test]", ok: 'Yes'
                     }	
                    sh '''
+                       echo "Push de la version finale en latest ..."
                        cd ./terraform_env_test/app
                        terraform destroy --auto-approve || true
                        docker tag $USERNAME/$IMAGE_NAME:$IMAGE_TAG $USERNAME/$IMAGE_NAME:latest
                        docker push $USERNAME/$IMAGE_NAME:latest
                        docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG
                        docker rmi $USERNAME/$IMAGE_NAME:latest
-                       echo "Fin"
+                       
+                       echo "Deploiement de la nouvelle application sur la prod ..."
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} rm -Rf ~/prod/deploy/ic-webapp/$IMAGE_TAG || true
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} mkdir -p ~/prod/deploy/ic-webapp/$IMAGE_TAG/ || true
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} cd ~/prod/deploy/ic-webapp/$IMAGE_TAG/
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} git clone https://github.com/lianhuahayu/k8s_manifest.git
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} cd k8s_manifest/
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo chmod u+x apply_release.sh
+                       ssh -o StrictHostKeyChecking=no -i ${keyfile} ${NUSER}@${EC2_PROD} sudo ./apply_release.sh
+
+                       echo "Fin du deploiement en prod"
                    '''               
                     }
                 }
@@ -157,7 +145,7 @@ pipeline {
                        echo 'PASSED' || true
                    '''               
                     }
-                }
-        }/* */
+            }
+        }
     }
 }
