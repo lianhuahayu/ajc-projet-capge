@@ -2,7 +2,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "ic-webapp"
-        IMAGE_TAG = readFile(/releases.txt).trim()
+        IMAGE_TAG = readFile(releases.txt).trim()
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
