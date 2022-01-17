@@ -22,10 +22,8 @@ pipeline {
        stage ('Build image ic-webapp'){
            agent any
            steps {
-               script{
                    image_tag -> ${IMAGE_TAG}
                    sh 'eco $IMAGE_TAG'
-               }
            }
        }
 
