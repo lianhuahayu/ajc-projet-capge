@@ -1,8 +1,7 @@
 pipeline {
 
     environment {
-        def image_tag = readFile(file: 'releases.txt').split(' ')[1]
-        IMAGE_TAG = println(image_tag)
+        IMAGE_TAG = "1.0"
         IMAGE_NAME = "ic-webapp"
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
@@ -16,14 +15,16 @@ pipeline {
 
     }
 
+    def image_tag = readFile(file: 'releases.txt').split(' ')[1]
+
     agent none
     stages{
        stage ('Build image ic-webapp'){
            agent any
            steps {
                script{
-                   def image_tag = readFile(file: 'releases.txt').split(' ')[1]
-                   println(image_tag)
+                   image_tag -> ${IMAGE_TAG}
+                   sh 'eco $IMAGE_TAG'
                }
            }
        }
