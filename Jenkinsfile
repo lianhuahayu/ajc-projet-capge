@@ -18,7 +18,7 @@ pipeline {
     agent none
     stages{
        
-       /*stage ('Build image ic-webapp'){
+       stage ('Build image ic-webapp'){
            agent any
            steps {
                script{
@@ -30,7 +30,7 @@ pipeline {
                   '''
                }
            }
-       }*/
+       }
 
         stage('Scan avec SNYK de l\'image') {
             agent any	
@@ -40,15 +40,26 @@ pipeline {
             steps {
                 script{
                     sh '''
+                    echo "Scan de l'image en cours ..."
                     docker scan --login --token $SNYK_TOKEN --accept-license
                     docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
                     echo `grep 'message' resultats.json`
                     OK=`grep 'ok' resultats.json`
                     if [ "${OK}" = '  "ok": true,' ]; then true; else echo false; fi
+                    echo "Fin du scan de l'image"
+                    echo "Test des variables d'environnements de l'image en cours ..."
+                    docker run -d --name $CONTAINER_NAME -p:8090:8080 $USERNAME/$IMAGE_NAME:$IMAGE_TAG
+                    essaiAppli=`curl -Is http://localhost |head -n 1`
+                    if [ ${essaiAppli} = 'HTTP/1.1 200 OK' ]; then true; else false; fi
+                    essaiEnvUN=`curl -s http://localhost:8090 |grep '<a href="https://www.odoo.com/' |tr -d ' ' |cut -d'"' -f2`
+                    if [ ${essaiEnvUN} = 'https://www.odoo.com/' ]; then true; else true; fi
+                    essaiEnvDEUX=`curl -s http://localhost:8090 |grep '<a href="https://www.pgadmin.org/' |tr -d ' ' |cut -d'"' -f2`
+                    if [ ${essaiEnvDEUX} = 'https://www.pgadmin.org/' ]; then true; else true; fi
                     '''
                 }
             }
         }
+
       /*stage ('Push vers un registre publique') {
            agent any
            environment{
@@ -133,6 +144,6 @@ pipeline {
                    '''               
                     }
                 }
-        }*/
+        }/* */
     }
 }
