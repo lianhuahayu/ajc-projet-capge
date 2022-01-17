@@ -52,8 +52,10 @@ pipeline {
                     essaiAppli=`curl -Is http://localhost:8090 |head -n 1`
                     if [ ${essaiAppli} = 'HTTP/1.1 200 OK' ]; then true; else false; fi
                     essaiEnvUN=`curl -s http://localhost:8090 | grep '<a href="https://www.odoo.com/' | tr -d ' ' | cut -d'"' -f2`
+                    echo ${essaiEnvUN}
                     if [ ${essaiEnvUN} = 'https://www.odoo.com/' ]; then true; else false; fi
                     essaiEnvDEUX=`curl -s http://localhost:8090 | grep '<a href="https://www.pgadmin.org/' | tr -d ' ' | cut -d'"' -f2`
+                    echo ${essaiEnvDEUX}
                     if [ ${essaiEnvDEUX} = 'https://www.pgadmin.org/' ]; then true; else false; fi
                     '''
                 }
