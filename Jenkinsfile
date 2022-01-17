@@ -54,7 +54,7 @@ pipeline {
                     
                     curl -Is http://localhost:8090 > test1.log
                     head -n1 test1.log > test1.log
-                    sed -i 's/\r$//' > test1.log
+                    sed -i 's/\r$//' test1.log > test1.log
                     cat test1.log
                     if [ `cat test1.log` = 'HTTP/1.0 200 OK' ]; then echo "pass"; else echo "false test1"; fi
                     
