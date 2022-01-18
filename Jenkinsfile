@@ -29,6 +29,7 @@ pipeline {
                   '''
                }
            }
+        }
         stage ('test suite'){
            agent any
            steps {
@@ -38,6 +39,7 @@ pipeline {
                   '''
                }
            }
+        }
        /*stage ('Build image ic-webapp'){
            agent any
            steps {
