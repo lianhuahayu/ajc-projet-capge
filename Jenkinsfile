@@ -25,7 +25,7 @@ pipeline {
                script{
                    sh '''
                     echo $IMAGE_TAG
-                    IMAGE_TAG = "`cut '-d ' -f2 releases.txt`"
+                    IMAGE_TAG = "`cut -d' ' -f2 releases.txt`"
                     echo $IMAGE_TAG
                   '''
                }
