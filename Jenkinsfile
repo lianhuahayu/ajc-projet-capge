@@ -2,7 +2,10 @@ pipeline {
 
     environment {
         IMAGE_NAME = "ic-webapp"
-        IMAGE_TAG = sh (script: 'cut -d' ' -f2 releases.txt')
+        IMAGE_TAG = sh (
+            script: 'cut -d' ' -f2 releases.txt',
+            returnStdout: true
+        ).trim()
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
         PASSWORD = credentials('token_dockerhub')
