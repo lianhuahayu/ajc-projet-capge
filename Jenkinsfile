@@ -54,15 +54,15 @@ pipeline {
         }
 
 
-        stage('Test du container $CONTAINER_NAME') {
+        stage('Test du container ${CONTAINER_NAME}') {
             agent any	
             steps {
                 script{
                     sh '''#!/bin/bash
                     docker stop $CONTAINER_NAME || true
                     docker rm $CONTAINER_NAME || true
-                    docker run -d --name $CONTAINER_NAME -p80:8080 $USERNAME/$IMAGE_NAME:$IMAGE_TAG
-                    if [[ "`head -n1 <(curl -iq http://localhost)`" == *"200"* ]];then echo "PASS"; else false; fi
+                    docker run -d --name $CONTAINER_NAME -p8099:8080 $USERNAME/$IMAGE_NAME:$IMAGE_TAG
+                    if [[ "`head -n1 <(curl -iq http://localhost:8099)`" == *"200"* ]];then echo "PASS"; else false; fi
                     docker stop $CONTAINER_NAME
                     docker rm $CONTAINER_NAME
                     '''
@@ -70,8 +70,7 @@ pipeline {
             }
         }
         
-
-      stage ('Push vers un registre publique') {
+      /*stage ('Push vers un registre publique') {
            agent any
            steps {
                script{
@@ -174,6 +173,6 @@ pipeline {
                    '''               
                     }
             }
-        }
+        }*/
     }
 }
