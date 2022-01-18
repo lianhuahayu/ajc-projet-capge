@@ -18,8 +18,27 @@ pipeline {
 
     agent none
     stages{
-       
-       stage ('Build image ic-webapp'){
+        
+        stage ('test variable env'){
+           agent any
+           steps {
+               script{
+                   sh '''
+                       IMAGE_TAG = "toto"
+                       echo $IMAGE_TAG
+                  '''
+               }
+           }
+        stage ('test suite'){
+           agent any
+           steps {
+               script{
+                   sh '''
+                       echo $IMAGE_TAG
+                  '''
+               }
+           }
+       /*stage ('Build image ic-webapp'){
            agent any
            steps {
                script{
@@ -31,9 +50,9 @@ pipeline {
                   '''
                }
            }
-       }
+       }*/
 
-        stage('Scan avec SNYK de l\'image') {
+        /*stage('Scan avec SNYK de l\'image') {
             agent any	
             environment{
                 SNYK_TOKEN = credentials('snyk-api-token')
@@ -171,6 +190,6 @@ pipeline {
                    '''               
                     }
             }
-        }
+        }*/
     }
 }
