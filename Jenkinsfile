@@ -19,23 +19,12 @@ pipeline {
     agent none
     stages{
         
-        stage ('test variable env'){
+       stage ('Build image ic-webapp'){
            agent any
            steps {
                script{
                    sh '''
-                    echo $IMAGE_TAG
-                    IMAGE_TAG = "`cut -d' ' -f2 releases.txt`"
-                    echo $IMAGE_TAG
-                  '''
-               }
-           }
-        }
-       /*stage ('Build image ic-webapp'){
-           agent any
-           steps {
-               script{
-                   sh '''
+                       IMAGE_TAG="`cut -d' ' -f2 releases.txt`"
                        docker stop $CONTAINER_NAME || true
                        docker rm $CONTAINER_NAME || true
                        docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG || true
@@ -43,9 +32,9 @@ pipeline {
                   '''
                }
            }
-       }*/
+       }
 
-        /*stage('Scan avec SNYK de l\'image') {
+        stage('Scan avec SNYK de l\'image') {
             agent any	
             environment{
                 SNYK_TOKEN = credentials('snyk-api-token')
@@ -53,6 +42,7 @@ pipeline {
             steps {
                 script{
                     sh '''#!/bin/bash
+                    IMAGE_TAG="`cut -d' ' -f2 releases.txt`"
                     echo "Scan de l'image en cours ..."
                     docker scan --login --token $SNYK_TOKEN --accept-license
                     docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
@@ -70,6 +60,7 @@ pipeline {
             steps {
                 script{
                     sh '''#!/bin/bash
+                    IMAGE_TAG="`cut -d' ' -f2 releases.txt`"
                     docker stop $CONTAINER_NAME || true
                     docker rm $CONTAINER_NAME || true
                     docker run -d --name $CONTAINER_NAME -p8090:8080 $USERNAME/$IMAGE_NAME:$IMAGE_TAG
@@ -85,7 +76,8 @@ pipeline {
            agent any
            steps {
                script{
-                   sh '''
+                   sh '''#!/bin/bash
+                       IMAGE_TAG="`cut -d' ' -f2 releases.txt`"
                        docker login -u $USERNAME -p $PASSWORD
                        docker push $USERNAME/$IMAGE_NAME:$IMAGE_TAG
                    '''
@@ -98,7 +90,8 @@ pipeline {
            steps {
             withCredentials([sshUserPrivateKey(credentialsId: "capge_key_pair", keyFileVariable: 'keyfile', usernameVariable: 'NUSER')]) {
                script{
-                    sh '''
+                    sh '''#!/bin/bash
+                    IMAGE_TAG="`cut -d' ' -f2 releases.txt`"
                     rm -Rf ./terraform_env_test || true
                     git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test
                     cd ./terraform_env_test
@@ -135,7 +128,8 @@ pipeline {
                     timeout(time: 15, unit: "MINUTES") {
                         input message: "Confirmer le deploiement sur la production de l'image ? [Cette acton supprimera l'environnement de test]", ok: 'Yes'
                     }	
-                   sh '''
+                   sh '''#!/bin/bash
+                       IMAGE_TAG="`cut -d' ' -f2 releases.txt`"
                        echo "Push de la version finale en latest ..."
                        cd ./terraform_env_test/app || true
                        terraform destroy --auto-approve || true
@@ -160,9 +154,7 @@ pipeline {
            agent any
            steps {
                script{
-                   sh '''
-                        #!/bin/bash
-
+                   sh '''#!/bin/bash
                         #Test de la vitrine prod
                         #Page accessible directement 200
                         if [[ "`head -n1 <(curl -iq ec2-54-235-230-173.compute-1.amazonaws.com)`" == *"200"* ]];then echo "PASS"; else false; fi
@@ -183,6 +175,6 @@ pipeline {
                    '''               
                     }
             }
-        }*/
+        }
     }
 }
