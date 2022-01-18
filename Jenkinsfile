@@ -3,7 +3,7 @@ pipeline {
     environment {
         IMAGE_NAME = "ic-webapp"
         IMAGE_TAG = "1.0"
-        env.TOTO = "test"
+        TOTO = "test"
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
         PASSWORD = credentials('token_dockerhub')
@@ -26,9 +26,9 @@ pipeline {
                script{
                    sh '''
                       
-                       echo $env.TOTO
-                       env.TOTO="tata"
-                       echo $env.TOTO
+                       echo $TOTO
+                       TOTO="tata"
+                       echo $TOTO
                   '''
                }
            }
@@ -38,17 +38,21 @@ pipeline {
            steps {
                script{
                    sh '''
-                       echo $env.TOTO
+                       echo $TOTO
+                       env.TATA = "tata"
+                       echo $env.TATA
+                       env.TATA = "toto"
+                       echo $env.TATA
                   '''
                }
            }
         }
-        stage ('test suite'){
+        stage ('test suite2'){
            agent any
            steps {
                script{
                    sh '''
-                       echo $IMAGE_TAG
+                       echo $env.TATA
                   '''
                }
            }
