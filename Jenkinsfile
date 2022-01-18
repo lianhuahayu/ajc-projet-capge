@@ -2,8 +2,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "ic-webapp"
-        IMAGE_TAG = "1.0"
-        TOTO = "test"
+        IMAGE_TAG = ""
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
         PASSWORD = credentials('token_dockerhub')
@@ -25,34 +24,8 @@ pipeline {
            steps {
                script{
                    sh '''
-                      
-                       echo $TOTO
-                       TOTO="tata"
-                       echo $TOTO
-                  '''
-               }
-           }
-        }
-        stage ('test suite'){
-           agent any
-           steps {
-               script{
-                   sh '''
-                       echo $TOTO
-                       env.TATA = "tata"
-                       echo $TATA
-                       env.TATA = "toto"
-                       echo $TATA
-                  '''
-               }
-           }
-        }
-        stage ('test suite2'){
-           agent any
-           steps {
-               script{
-                   sh '''
-                       echo $TATA
+                    IMAGE_TAG="`cut -d' ' -f2 releases.txt`"
+                    echo $IMAGE_TAG
                   '''
                }
            }
