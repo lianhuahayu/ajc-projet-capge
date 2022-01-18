@@ -40,9 +40,9 @@ pipeline {
                    sh '''
                        echo $TOTO
                        env.TATA = "tata"
-                       echo $env.TATA
+                       echo $TATA
                        env.TATA = "toto"
-                       echo $env.TATA
+                       echo $TATA
                   '''
                }
            }
@@ -52,7 +52,7 @@ pipeline {
            steps {
                script{
                    sh '''
-                       echo $env.TATA
+                       echo $TATA
                   '''
                }
            }
