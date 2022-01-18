@@ -154,21 +154,20 @@ pipeline {
                         #Test de la vitrine prod
                         #Page accessible directement 200
                         if [[ "`head -n1 <(curl -iq ec2-54-235-230-173.compute-1.amazonaws.com)`" == *"200"* ]];then echo "PASS"; else false; fi
-       
-                        #Test de l’accès à Odoo         
-                        #Redirection de la page vers la bonne code 302
-                        if [[ "`head -n1 <(curl -iq ec2-54-235-230-173.compute-1.amazonaws.com:32020)`" == *"302"* ]];then echo "PASS"; else false; fi
 
                         #Verification de la présence du lien odoo sur la vitrine ic-webapp
                         if [[ "`curl -iq http://ec2-54-235-230-173.compute-1.amazonaws.com`" == *"http://ec2-54-235-230-173.compute-1.amazonaws.com:32020"* ]];then echo "YES"; else echo "NO"; fi
 
                         #Verification de la présence du lien pgadmin sur la vitrine  ic-webapp
-                        if [[ "`curl -iq http://ec2-54-235-230-173.compute-1.amazonaws.com`" == *"32020"* ]];then echo "PASS"; else false; fi
-           
-
+                        if [[ "`curl -iq http://ec2-54-235-230-173.compute-1.amazonaws.com`" == *"http://ec2-54-235-230-173.compute-1.amazonaws.com:32125"* ]];then echo "PASS"; else false; fi
+                        
                         #Test de l’accès à pgAdmin     
+                        #Redirection de la page vers la bonne code 302
+                        if [[ "`head -n1 <(curl -iq ec2-54-235-230-173.compute-1.amazonaws.com:32125)`" == *"302"* ]];then echo "PASS"; else false; fi                
+           
+                        #Test de l’accès à Odoo         
                         #Redirection de la page vers la bonne code 303
-                        if [[ "`head -n1 <(curl -iq ec2-54-235-230-173.compute-1.amazonaws.com:32125)`" == *"303"* ]];then echo "PASS"; else false; fi
+                        if [[ "`head -n1 <(curl -iq ec2-54-235-230-173.compute-1.amazonaws.com:32020)`" == *"303"* ]];then echo "PASS"; else false; fi
                    '''               
                     }
             }
