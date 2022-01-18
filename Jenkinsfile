@@ -45,8 +45,7 @@ pipeline {
                     docker scan --login --token $SNYK_TOKEN --accept-license
                     docker scan --json --file Dockerfile $USERNAME/$IMAGE_NAME:$IMAGE_TAG > resultats.json
                     echo `grep 'message' resultats.json`
-                    OK=`grep 'ok' resultats.json`
-                    if [ "${OK}" = '  "ok": true,' ]; then true; else echo false; fi
+                    snyk-to-html -i resultats.json -o resultats.html
                     echo "Fin du scan de l'image"
                     '''
                 }
@@ -54,7 +53,7 @@ pipeline {
         }
 
 
-        stage('Test du container ${CONTAINER_NAME}') {
+        stage('Test du container test-ic-webapp') {
             agent any	
             steps {
                 script{
@@ -154,11 +153,11 @@ pipeline {
 
                         #Test de la vitrine prod
                         #Page accessible directement 200
-                        if [[ "`head -n1 <(curl -iq ec2-54-235-sdfsdf.compute-1.amazonaws.com)`" == *"200"* ]];then echo "PASS"; else false; fi
+                        if [[ "`head -n1 <(curl -iq ec2-54-235-230-173.compute-1.amazonaws.com)`" == *"200"* ]];then echo "PASS"; else false; fi
        
                         #Test de l’accès à Odoo         
                         #Redirection de la page vers la bonne code 302
-                        if [[ "`head -n1 <(curl -iq ec2-54-235-sdfsdf.compute-1.amazonaws.com:32020)`" == *"302"* ]];then echo "PASS"; else false; fi
+                        if [[ "`head -n1 <(curl -iq ec2-54-235-230-173.compute-1.amazonaws.com:32020)`" == *"302"* ]];then echo "PASS"; else false; fi
 
                         #Verification de la présence du lien odoo sur la vitrine ic-webapp
                         if [[ "`curl -iq http://ec2-54-235-230-173.compute-1.amazonaws.com`" == *"http://ec2-54-235-230-173.compute-1.amazonaws.com:32020"* ]];then echo "YES"; else echo "NO"; fi
@@ -169,7 +168,7 @@ pipeline {
 
                         #Test de l’accès à pgAdmin     
                         #Redirection de la page vers la bonne code 303
-                        if [[ "`head -n1 <(curl -iq ec2-54-235-sdfsdf.compute-1.amazonaws.com:32125)`" == *"303"* ]];then echo "PASS"; else false; fi
+                        if [[ "`head -n1 <(curl -iq ec2-54-235-230-173.compute-1.amazonaws.com:32125)`" == *"303"* ]];then echo "PASS"; else false; fi
                    '''               
                     }
             }
