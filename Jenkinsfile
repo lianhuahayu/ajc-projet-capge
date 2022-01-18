@@ -1,10 +1,11 @@
 pipeline {
 
     environment {
-        IMAGE_TAG = "1.0"
         IMAGE_NAME = "ic-webapp"
+        IMAGE_TAG = "1.0"
         USERNAME = "lianhuahayu"
         CONTAINER_NAME = "test-ic-webapp"
+        PASSWORD = credentials('token_dockerhub')
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY') 
         EC2_PROD = "ec2-54-235-230-173.compute-1.amazonaws.com" 
@@ -15,19 +16,24 @@ pipeline {
 
     }
 
-    def image_tag = readFile(file: 'releases.txt').split(' ')[1]
-
     agent none
     stages{
+       
        stage ('Build image ic-webapp'){
            agent any
            steps {
-                   ${IMAGE_TAG} -> image_tag
-                   sh 'eco $IMAGE_TAG'
+               script{
+                   sh '''
+                       docker stop $CONTAINER_NAME || true
+                       docker rm $CONTAINER_NAME || true
+                       docker rmi $USERNAME/$IMAGE_NAME:$IMAGE_TAG || true
+                       docker build -t $USERNAME/$IMAGE_NAME:$IMAGE_TAG .
+                  '''
+               }
            }
        }
 
-        /*stage('Scan avec SNYK de l\'image') {
+        stage('Scan avec SNYK de l\'image') {
             agent any	
             environment{
                 SNYK_TOKEN = credentials('snyk-api-token')
@@ -47,18 +53,31 @@ pipeline {
             }
         }
 
+
+        stage('Test du container $CONTAINER_NAME') {
+            agent any	
+            steps {
+                script{
+                    sh '''#!/bin/bash
+                    docker stop $CONTAINER_NAME || true
+                    docker rm $CONTAINER_NAME || true
+                    docker run -d --name $CONTAINER_NAME -p80:8080 $USERNAME/$IMAGE_NAME:$IMAGE_TAG
+                    if [[ "`head -n1 <(curl -iq http://localhost)`" == *"200"* ]];then echo "PASS"; else false; fi
+                    docker stop $CONTAINER_NAME
+                    docker rm $CONTAINER_NAME
+                    '''
+                }
+            }
+        }
+        
+
       stage ('Push vers un registre publique') {
            agent any
-           environment{
-               PASSWORD = credentials('token_dockerhub')
-           }
            steps {
                script{
                    sh '''
                        docker login -u $USERNAME -p $PASSWORD
                        docker push $USERNAME/$IMAGE_NAME:$IMAGE_TAG
-                       docker stop $CONTAINER_NAME || true
-                       docker rm $CONTAINER_NAME || true
                    '''
                 }
              }
@@ -71,7 +90,6 @@ pipeline {
                script{
                     sh '''
                     rm -Rf ./terraform_env_test || true
-                    mkdir ./terraform_env_test
                     git clone https://github.com/omarpiotr/terraform-ic-webapp.git ./terraform_env_test
                     cd ./terraform_env_test
                     cp $keyfile .aws/capge_projet_kp.pem
@@ -133,10 +151,29 @@ pipeline {
            steps {
                script{
                    sh '''
-                       echo 'PASSED' || true
+                        #!/bin/bash
+
+                        #Test de la vitrine prod
+                        #Page accessible directement 200
+                        if [[ "`head -n1 <(curl -iq ec2-54-235-sdfsdf.compute-1.amazonaws.com)`" == *"200"* ]];then echo "PASS"; else false; fi
+       
+                        #Test de l’accès à Odoo         
+                        #Redirection de la page vers la bonne code 302
+                        if [[ "`head -n1 <(curl -iq ec2-54-235-sdfsdf.compute-1.amazonaws.com:32020)`" == *"302"* ]];then echo "PASS"; else false; fi
+
+                        #Verification de la présence du lien odoo sur la vitrine ic-webapp
+                        if [[ "`curl -iq http://ec2-54-235-230-173.compute-1.amazonaws.com`" == *"http://ec2-54-235-230-173.compute-1.amazonaws.com:32020"* ]];then echo "YES"; else echo "NO"; fi
+
+                        #Verification de la présence du lien pgadmin sur la vitrine  ic-webapp
+                        if [[ "`curl -iq http://ec2-54-235-230-173.compute-1.amazonaws.com`" == *"32020"* ]];then echo "PASS"; else false; fi
+           
+
+                        #Test de l’accès à pgAdmin     
+                        #Redirection de la page vers la bonne code 303
+                        if [[ "`head -n1 <(curl -iq ec2-54-235-sdfsdf.compute-1.amazonaws.com:32125)`" == *"303"* ]];then echo "PASS"; else false; fi
                    '''               
                     }
             }
-        }*/
+        }
     }
 }
